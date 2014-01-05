@@ -1,0 +1,189 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>Products Pagination Plugin (Zen-Cart 1.3.9/1.5.0/1.5.1)</title>
+
+<style type="text/css">
+<!--
+a, a:active, a:visited {
+  color: #006666;
+  text-decoration: none
+}
+a:hover {
+    color:#00CC99;
+    text-decoration: underline;
+}
+BODY, P, H1, H2, H3, H4, H5, H6, LI, TD, DD, DT {
+  font-family: Verdana, AvantGarde, Tahoma, Arial, sans-serif;
+  font-size: 10pt;
+  color: black;
+  padding: 0px;
+  margin: 20px;
+}
+H1, H2, H3, H4 {
+  font-weight: bold
+}
+h1 {
+  font-size: 20px;
+}
+h2 {
+  font-size: 16px;
+  border-top: 1px solid #404040;
+}
+code {
+  padding-left: 25px;
+}
+ol li {
+  margin-left: 0;
+}
+.corefile {
+  color: red;
+}
+.removed {
+  text-decoration: line-through;
+}
+ol li, ul li {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+ul li ul {
+  padding-left: 0;
+}
+.changed {
+  color: blue;
+}
+.added {
+  color: green;
+}
+-->
+</style>
+</head>
+
+<body>
+<a name="top" id="top"></a>
+<h1>Product Pagination for Zen Cart 1.3.9, 1.5.0, 1.5.1</h1>
+<h3>Version 1.4.7 by lat9</h3>
+<p>Current Support Thread at Zen Cart Forums: <a href="http://www.zen-cart.com/forum/showthread.php?t=169227">http://www.zen-cart.com/forum/showthread.php?t=169227</a></p>
+
+<h2>Version History:</h2>
+<ul>
+<li>v1.0.0, 2010-11-30, Initial release.</li>
+<li>v1.0.1, 2011-04-14, Added the product listing link feature; requires re-running the installation SQL if you want the link.</li>
+<li>v1.1.0, 2011-08-08, Updated install to support Zen Cart 1.5.0+ admin_pages.</li>
+<li>v1.1.1, 2011-08-15, Updated 1.5.0+ install SQL to correct the problem described <a href="http://www.zen-cart.com/forum/showpost.php?p=993178&amp;postcount=9">here</a>.</li>
+<li>v1.2.0, 2012-03-01, Added support for all pages currently used by the split pages' results.  Consolidated the CSS into a single file.</li>
+<li>v1.2.1, 2012-03-20, Corrected install SQL scripts to remove unwanted back-quotes around column and table names.</li>
+<li>v1.2.2, 2012-05-16, Corrected HTML validation errors (/includes/classes/split_page_results.php, /includes/functions/extra_functions/products_pagination_functions.php and /includes/templates/YOUR_TEMPLATE/templates/tpl_products_next_previous.php).</li>
+<li>v1.3.0, 2012-09-02, Added support for drop-down page choice and/or user-selectable number of items-per-page. <strong>Note:</strong> New configuration switches in your admin enable these features &mdash; you will need to re-run the SQL install script on an upgrade.</li>
+<li>v1.4.0, 2012-09-21:<ul>
+  <li>Merged changes into v1.5.1 /includes/classes/split_page_results.php; the merged file supports v1.3.9 and v1.5.0 as well as v1.5.1.</li>
+  <li>Updated htmlentities call for PHP v5.4+</li>
+  <li>Corrected remaining HTML validation issue.</li>
+</ul></li>
+<li>v1.4.1, 2012-09-23, Corrected problems where changing the sort-order or going next/previous would reset the items/page and resetting the items/page would reset the sort order.  The following files have been <span class="changed">changed</span>/<span class="added">added</span>:<ul>
+  <li><span class="changed">/includes/classes/split_page_results.php</span></li>
+  <li><span class="changed">/includes/functions/extra_functions/products_pagination_functions.php</span></li>
+  <li><span class="added">/includes/init_includes/overrides/init_canonical.php</span></li>
+  <li><span class="added">/includes/templates/YOUR_TEMPLATE/templates/tpl_index_product_list.php</span></li>
+  <li><span class="added">/includes/templates/YOUR_TEMPLATE/templates/tpl_modules_listing_display_order.php</span></li>
+</ul></li>
+<li>v1.4.2, 2012-10-03, Corrected possible divide-by-zero and sort/count reset issues on the advanced_search_result page.  The following files have been changed:<ul>
+  <li>/includes/classes/split_page_results.php</li>
+  <li>/includes/functions/extra_functions/products_pagination_functions.php</li>
+  <li>/includes/templates/YOUR_TEMPLATE/templates/tpl_modules_listing_display_order.php</li>
+</ul></li>
+<li>v1.4.3, 2012-10-20: Changed /includes/classes/split_page_results.php and /includes/functions/extra_functions/products_pagination_functions.php:<ul>
+  <li>BUGFIX: Links are displayed when zero items are returned.</li>
+  <li>BUGFIX: Page-select dropdown is displayed even if only 1 page is active.</li>
+  <li>BUGFIX: Item-count dropdown is displayed even if there are fewer items than the minimum to display.</li>
+</ul></li>
+<li>v1.4.4, 2012-11-12: Changed /includes/classes/split_page_results.php and /includes/templates/YOUR_TEMPLATE/templates/tpl_modules_listing_display_order.php:<ul>
+  <li>BUGFIX (yet again): Correct possible divide-by-0.</li>
+</ul></li>
+<li>v1.4.5, 2012-11-21:<ul>
+  <li>BUGFIX: Problems on product_listing and advanced_search_results pages when using multiple-add-to-cart feature.</li>
+  <li>The following files were <span class="changed">changed</span>/<span class="added">added</span>:<ul>
+    <li class="changed">/includes/classes/split_page_results.php</li>
+    <li class="added">/includes/extra_cart_actions/pagination_actions.php</li>
+    <li class="changed">/includes/init_includes/init_pagination.php</li>
+    <li class="changed">/includes/functions/extra_functions/products_pagination_functions.php</li>
+    <li class="changed">/includes/templates/YOUR_TEMPLATE/tpl_index_product_list.php</li>
+  </ul></li>
+</ul></li>
+<li>v1.4.6, 2012-12-02:<ul>
+  <li>BUGFIX: Changing item-count or page-count on advanced_search_results pages resulted in main page being displayed.</li>
+  <li>BUGFIX: Make sure that the count value is numeric before including DISTINCT in the MySQL count() directive.</li>
+  <li>The following files were <span class="changed">changed</span>/<span class="added">added</span>:<ul>
+    <li class="changed">/includes/classes/split_page_results.php</li>
+    <li class="added">/includes/modules/YOUR_TEMPLATE/product_listing.php</li>
+  </ul></li>
+</ul></li>
+<li>v1.4.7, 2013-09-19:<ul>
+  <li>BUGFIX: Modified BUGFIX #2 from v1.4.6, needed to check that the $count_key value was other than '*' rather than numeric; was causing incorrect results on the products' listing and advanced-search results pages.  Changed /includes/classes/split_page_results.php.</li>
+</ul></li>
+</ul>
+
+<h2>What it does</h2>
+<p>This add-on replaces the default previous/next navigation for your store&rsquo;s product information pages:</p>
+<ul>
+<li>document_general_info</li>
+<li>document_product_info</li>
+<li>product_free_shipping_info</li>
+<li>product_info</li>
+<li>product_music_info</li>
+</ul>
+<p>and optionally (via admin configuration) the previous/next navigation for these other pages in your store:</p>
+<ul>
+<li>account_history</li>
+<li>advanced_search_result</li>
+<li>featured_products</li>
+<li>index (a.k.a. the product listing page)</li>
+<li>product_reviews</li>
+<li>products_all</li>
+<li>products_new</li>
+<li>reviews</li>
+<li>specials</li>
+</ul>
+<p>The updated display looks like <a target="_blank" href="http://www.latitude9needlearts.com/index.php?main_page=product_info&amp;cPath=5&amp;products_id=11">this</a>.  Links to the first and last products in the category (or page groups for the &quot;other&quot; pages) are always displayed, and you control the maximum number of links to be shown.  When you hover over a link on a product-information page, the name of the product associated with that link is displayed by the browser.</p>
+<p>Starting with v1.3.0, there are optional (default: <em>false</em>) controls in your admin's <em>Configuration->Products Pagination</em> that enable you to display a page-select drop-down where your visitors can choose which page of the display to go to next and an item-count drop-down where your visitors can choose how many items to view per display page.  These controls appear <em>only</em> on the "Other pages to link".</p>
+
+<h2>How to use it</h2>
+<p>After you have installed the SQL patch in your store&rsquo;s admin, you will see the <em>Configuration->Products Pagination</em> selection.  Within that selection, there are eight values that you can use to control the plugin&rsquo;s display:</p>
+<ol>
+<li><b>Products Pagination &mdash; Maximum Links</b>.  This value (default: 10) specifies the number of product links that are displayed without pagination; e.g. for the default value, if a category contains 10 or fewer products you'll get a next/previous display that contains selections for products 1 through 10 along with the <em>Previous</em> and <em>Next</em> links.</li>
+<li><b>Products Pagination &mdash; Intermediate Links</b>.  This value (default: 7) specifies the number of product links to show once pagination has &quot;kicked in&quot;, i.e. if the number of products in the current category is greater than <em>Maximum Links</em>.  For the default values, if the current category contains more than 10 products, you'll get a next/previous display that always contains the links for the first and last products and the <em>Previous</em> and <em>Next</em> links, as well as up to 7 product-specific links.  An ellipsis (&hellip;) is displayed when there is a break in the product sequence.</li>
+<li><b>Enable product listing link?</b>.  This value (default: true) specifies whether (true) or not (false) to include a &quot;View product listing&quot; link on the same line as &quot;Viewing product x of y&quot;.</li>
+<li><b>Enable links on other pages?</b>.  This value (default: true) specifies whether (true) or not (false) the &quot;Other pages to link&quot; will have the pagination links applied.</li>
+<li><b>Other pages to link</b>. This value (default: account_history,advanced_search_result,featured_products,index,product_reviews,products_all,products_new,reviews,specials) contains a comma-separated list of &quot;other&quot; pages to which the pagination should be applied.</li> 
+<li><b>Include page-select drop-down?</b>.  This value (default: false) specifies whether (true) or not (false) the &quot;Other pages to link&quot; will include a drop-down list to allow the customer to go to a specific page number.</li>
+<li><b>Include item-count drop-down?</b>.  This value (default: false) specifies whether (true) or not (false) the &quot;Other pages to link&quot; will include a drop-down list to allow the customer to choose the number of items displayed per page.  The values are specified by the following field (&quot;Item Counts&quot;).</li>
+<li><b>Item Counts</b>. This value contains a comma-separated list that identifies the selections offered to the customer to allow them to choose the number of items displayed per page; the default value is &quot;10,25,50,100,*&quot;, which identifies that the customer can choose one of 10, 25, 50, 100 or "All" items to be displayed.  If enabled, the smallest numerical value in the list becomes the default minimum items displayed for all &quot;Other&quot; pages regardless of other admin settings.</li>
+</ol>
+
+<h2>Installation</h2>
+<p>There is one <span class="corefile">core-file overwrite</span> in this mod; you should <strong>always</strong> backup your cart&rsquo;s database and files prior to making any changes.</p>
+<ol>
+<li>If you are using Zen Cart v1.5.0 or later, run the <strong>product_pagination_install.sql</strong> script; for Zen Cart v1.3.9x, run the <strong>product_pagination_install_v139.sql</strong> script.  Go to your admin&rsquo;s Tools-&gt;Install SQL Patches; from there you can either upload the .sql file or copy and paste the contents of the file.</li>
+<li>Copy the catalog files to your cart, after renaming the &quot;YOUR_TEMPLATE&quot; directories (3 of them) to match your custom template&rsquo;s name and the &quot;YOUR_ADMIN&quot; directory to match your renamed admin folder; core file overwrites are identified like <span class="corefile">this</span>:
+<ol>
+<li>/includes/auto_loaders/config.pagination.php</li>
+<li><span class="corefile">/includes/classes/split_page_results.php</span></li>
+<li>/includes/functions/extra_functions/products_pagination_functions.php</li>
+<li>/includes/init_includes/init_pagination.php</li>
+<li>/includes/init_includes/overrides/init_canonical.php</li>
+<li>/includes/languages/english/extra_definitions/YOUR_TEMPLATE/products_pagination.php</li>
+<li>/includes/modules/YOUR_TEMPLATE/product_listing.php</li>
+<li>/includes/modules/YOUR_TEMPLATE/product_prev_next.php</li>
+<li>/includes/templates/YOUR_TEMPLATE/css/stylesheet_prod_pagination.css</li>
+<li>/includes/templates/YOUR_TEMPLATE/templates/tpl_index_product_list.php</li>
+<li>/includes/templates/YOUR_TEMPLATE/templates/tpl_modules_listing_display_order.php</li>
+<li>/includes/templates/YOUR_TEMPLATE/templates/tpl_products_next_previous.php</li>
+<li>/YOUR_ADMIN/includes/languages/english/extra_definitions/products_pagination.php</li>
+</ol></li>
+</ol>
+
+<h2>Un-install</h2>
+<p>Run either the <strong>product_pagination_uninstall.sql</strong> (v1.5.0 or later) or <strong>product_pagination_uninstall_v139.sql</strong> (v1.3.9x) script to remove the database entries, then delete the files you previously copied.</p>
+</body>
+</html>
