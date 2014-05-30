@@ -49,11 +49,20 @@ function ppCountDropdown ($numItems, $whichCount, $formSuffix) {
   $countArray = explode(',', PRODUCTS_PAGINATION_COUNT_VALUES);
   if (count($countArray) > 0) {
     $pageArray = array();
-    for ($i=0, $n=sizeof($countArray); $i<$n; $i++) {
+    for ($i=0, $n=sizeof($countArray), $done_all = false; $i<$n; $i++) {
       if ($countArray[$i] == '*') {
-        $pageArray[] = array( 'id' => 'all', 'text' => PP_TEXT_ALL );
+        if (!$done_all) {
+          $pageArray[] = array( 'id' => 'all', 'text' => PP_TEXT_ALL );
+          $done_all = true;
+          
+        }
       } elseif ($numItems > $countArray[$i]) {
         $pageArray[] = array( 'id' => $countArray[$i], 'text' => $countArray[$i]);
+        
+      } elseif (!$done_all) {
+        $pageArray[] = array ('id' => 'all', 'text' => PP_TEXT_ALL);
+        $done_all = true;
+        
       }
     }
 
