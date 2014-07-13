@@ -130,64 +130,69 @@ ul li ul {
 
 <h2>Version History:</h2>
 <ul>
-<li>v1.0.0, 2010-11-30, Initial release.</li>
-<li>v1.0.1, 2011-04-14, Added the product listing link feature; requires re-running the installation SQL if you want the link.</li>
-<li>v1.1.0, 2011-08-08, Updated install to support Zen Cart 1.5.0+ admin_pages.</li>
-<li>v1.1.1, 2011-08-15, Updated 1.5.0+ install SQL to correct the problem described <a href="http://www.zen-cart.com/forum/showpost.php?p=993178&amp;postcount=9">here</a>.</li>
-<li>v1.2.0, 2012-03-01, Added support for all pages currently used by the split pages' results.  Consolidated the CSS into a single file.</li>
-<li>v1.2.1, 2012-03-20, Corrected install SQL scripts to remove unwanted back-quotes around column and table names.</li>
-<li>v1.2.2, 2012-05-16, Corrected HTML validation errors (/includes/classes/split_page_results.php, /includes/functions/extra_functions/products_pagination_functions.php and /includes/templates/YOUR_TEMPLATE/templates/tpl_products_next_previous.php).</li>
-<li>v1.3.0, 2012-09-02, Added support for drop-down page choice and/or user-selectable number of items-per-page. <strong>Note:</strong> New configuration switches in your admin enable these features &mdash; you will need to re-run the SQL install script on an upgrade.</li>
-<li>v1.4.0, 2012-09-21:<ul>
-  <li>Merged changes into v1.5.1 /includes/classes/split_page_results.php; the merged file supports v1.3.9 and v1.5.0 as well as v1.5.1.</li>
-  <li>Updated htmlentities call for PHP v5.4+</li>
-  <li>Corrected remaining HTML validation issue.</li>
-</ul></li>
-<li>v1.4.1, 2012-09-23, Corrected problems where changing the sort-order or going next/previous would reset the items/page and resetting the items/page would reset the sort order.  The following files have been <span class="changed">changed</span>/<span class="added">added</span>:<ul>
-  <li><span class="changed">/includes/classes/split_page_results.php</span></li>
-  <li><span class="changed">/includes/functions/extra_functions/products_pagination_functions.php</span></li>
-  <li><span class="added">/includes/init_includes/overrides/init_canonical.php</span></li>
-  <li><span class="added">/includes/templates/YOUR_TEMPLATE/templates/tpl_index_product_list.php</span></li>
-  <li><span class="added">/includes/templates/YOUR_TEMPLATE/templates/tpl_modules_listing_display_order.php</span></li>
-</ul></li>
-<li>v1.4.2, 2012-10-03, Corrected possible divide-by-zero and sort/count reset issues on the advanced_search_result page.  The following files have been changed:<ul>
-  <li>/includes/classes/split_page_results.php</li>
-  <li>/includes/functions/extra_functions/products_pagination_functions.php</li>
-  <li>/includes/templates/YOUR_TEMPLATE/templates/tpl_modules_listing_display_order.php</li>
-</ul></li>
-<li>v1.4.3, 2012-10-20: Changed /includes/classes/split_page_results.php and /includes/functions/extra_functions/products_pagination_functions.php:<ul>
-  <li>BUGFIX: Links are displayed when zero items are returned.</li>
-  <li>BUGFIX: Page-select dropdown is displayed even if only 1 page is active.</li>
-  <li>BUGFIX: Item-count dropdown is displayed even if there are fewer items than the minimum to display.</li>
-</ul></li>
-<li>v1.4.4, 2012-11-12: Changed /includes/classes/split_page_results.php and /includes/templates/YOUR_TEMPLATE/templates/tpl_modules_listing_display_order.php:<ul>
-  <li>BUGFIX (yet again): Correct possible divide-by-0.</li>
-</ul></li>
-<li>v1.4.5, 2012-11-21:<ul>
-  <li>BUGFIX: Problems on product_listing and advanced_search_results pages when using multiple-add-to-cart feature.</li>
-  <li>The following files were <span class="changed">changed</span>/<span class="added">added</span>:<ul>
-    <li class="changed">/includes/classes/split_page_results.php</li>
-    <li class="added">/includes/extra_cart_actions/pagination_actions.php</li>
-    <li class="changed">/includes/init_includes/init_pagination.php</li>
-    <li class="changed">/includes/functions/extra_functions/products_pagination_functions.php</li>
-    <li class="changed">/includes/templates/YOUR_TEMPLATE/tpl_index_product_list.php</li>
+  <li>v1.0.0, 2010-11-30, Initial release.</li>
+  <li>v1.0.1, 2011-04-14, Added the product listing link feature; requires re-running the installation SQL if you want the link.</li>
+  <li>v1.1.0, 2011-08-08, Updated install to support Zen Cart 1.5.0+ admin_pages.</li>
+  <li>v1.1.1, 2011-08-15, Updated 1.5.0+ install SQL to correct the problem described <a href="http://www.zen-cart.com/forum/showpost.php?p=993178&amp;postcount=9">here</a>.</li>
+  <li>v1.2.0, 2012-03-01, Added support for all pages currently used by the split pages' results.  Consolidated the CSS into a single file.</li>
+  <li>v1.2.1, 2012-03-20, Corrected install SQL scripts to remove unwanted back-quotes around column and table names.</li>
+  <li>v1.2.2, 2012-05-16, Corrected HTML validation errors (/includes/classes/split_page_results.php, /includes/functions/extra_functions/products_pagination_functions.php and /includes/templates/YOUR_TEMPLATE/templates/tpl_products_next_previous.php).</li>
+  <li>v1.3.0, 2012-09-02, Added support for drop-down page choice and/or user-selectable number of items-per-page. <strong>Note:</strong> New configuration switches in your admin enable these features &mdash; you will need to re-run the SQL install script on an upgrade.</li>
+  <li>v1.4.0, 2012-09-21:<ul>
+    <li>Merged changes into v1.5.1 /includes/classes/split_page_results.php; the merged file supports v1.3.9 and v1.5.0 as well as v1.5.1.</li>
+    <li>Updated htmlentities call for PHP v5.4+</li>
+    <li>Corrected remaining HTML validation issue.</li>
   </ul></li>
-</ul></li>
-<li>v1.4.6, 2012-12-02:<ul>
-  <li>BUGFIX: Changing item-count or page-count on advanced_search_results pages resulted in main page being displayed.</li>
-  <li>BUGFIX: Make sure that the count value is numeric before including DISTINCT in the MySQL count() directive.</li>
-  <li>The following files were <span class="changed">changed</span>/<span class="added">added</span>:<ul>
-    <li class="changed">/includes/classes/split_page_results.php</li>
-    <li class="added">/includes/modules/YOUR_TEMPLATE/product_listing.php</li>
+  <li>v1.4.1, 2012-09-23, Corrected problems where changing the sort-order or going next/previous would reset the items/page and resetting the items/page would reset the sort order.  The following files have been <span class="changed">changed</span>/<span class="added">added</span>:<ul>
+    <li><span class="changed">/includes/classes/split_page_results.php</span></li>
+    <li><span class="changed">/includes/functions/extra_functions/products_pagination_functions.php</span></li>
+    <li><span class="added">/includes/init_includes/overrides/init_canonical.php</span></li>
+    <li><span class="added">/includes/templates/YOUR_TEMPLATE/templates/tpl_index_product_list.php</span></li>
+    <li><span class="added">/includes/templates/YOUR_TEMPLATE/templates/tpl_modules_listing_display_order.php</span></li>
   </ul></li>
-</ul></li>
-<li>v1.4.7, 2013-09-19:<ul>
-  <li>BUGFIX: Modified BUGFIX #2 from v1.4.6, needed to check that the $count_key value was other than '*' rather than numeric; was causing incorrect results on the products' listing and advanced-search results pages.  Changed /includes/classes/split_page_results.php.</li>
-</ul></li>
-<li>v1.4.8, 2014-05-30:<ul>
-  <li>Verified Zen Cart v1.5.2 and v1.5.3 compatibility.</li>
-  <li>BUGFIX: Item count dropdown should contain &quot;All&quot; if the total items' count is less than the maximum <em>Item Count</em> value.  Changed /includes/functions/extra_functions/products_pagination_functions.php.</li>
-</ul></li>
+  <li>v1.4.2, 2012-10-03, Corrected possible divide-by-zero and sort/count reset issues on the advanced_search_result page.  The following files have been changed:<ul>
+    <li>/includes/classes/split_page_results.php</li>
+    <li>/includes/functions/extra_functions/products_pagination_functions.php</li>
+    <li>/includes/templates/YOUR_TEMPLATE/templates/tpl_modules_listing_display_order.php</li>
+  </ul></li>
+  <li>v1.4.3, 2012-10-20: Changed /includes/classes/split_page_results.php and /includes/functions/extra_functions/products_pagination_functions.php:<ul>
+    <li>BUGFIX: Links are displayed when zero items are returned.</li>
+    <li>BUGFIX: Page-select dropdown is displayed even if only 1 page is active.</li>
+    <li>BUGFIX: Item-count dropdown is displayed even if there are fewer items than the minimum to display.</li>
+  </ul></li>
+  <li>v1.4.4, 2012-11-12: Changed /includes/classes/split_page_results.php and /includes/templates/YOUR_TEMPLATE/templates/tpl_modules_listing_display_order.php:<ul>
+    <li>BUGFIX (yet again): Correct possible divide-by-0.</li>
+  </ul></li>
+  <li>v1.4.5, 2012-11-21:<ul>
+    <li>BUGFIX: Problems on product_listing and advanced_search_results pages when using multiple-add-to-cart feature.</li>
+    <li>The following files were <span class="changed">changed</span>/<span class="added">added</span>:<ul>
+      <li class="changed">/includes/classes/split_page_results.php</li>
+      <li class="added">/includes/extra_cart_actions/pagination_actions.php</li>
+      <li class="changed">/includes/init_includes/init_pagination.php</li>
+      <li class="changed">/includes/functions/extra_functions/products_pagination_functions.php</li>
+      <li class="changed">/includes/templates/YOUR_TEMPLATE/tpl_index_product_list.php</li>
+    </ul></li>
+  </ul></li>
+  <li>v1.4.6, 2012-12-02:<ul>
+    <li>BUGFIX: Changing item-count or page-count on advanced_search_results pages resulted in main page being displayed.</li>
+    <li>BUGFIX: Make sure that the count value is numeric before including DISTINCT in the MySQL count() directive.</li>
+    <li>The following files were <span class="changed">changed</span>/<span class="added">added</span>:<ul>
+      <li class="changed">/includes/classes/split_page_results.php</li>
+      <li class="added">/includes/modules/YOUR_TEMPLATE/product_listing.php</li>
+    </ul></li>
+  </ul></li>
+  <li>v1.4.7, 2013-09-19:<ul>
+    <li>BUGFIX: Modified BUGFIX #2 from v1.4.6, needed to check that the $count_key value was other than '*' rather than numeric; was causing incorrect results on the products' listing and advanced-search results pages.  Changed /includes/classes/split_page_results.php.</li>
+  </ul></li>
+  <li>v1.4.8, 2014-05-30:<ul>
+    <li>Verified Zen Cart v1.5.2 and v1.5.3 compatibility.</li>
+    <li>BUGFIX: Item count dropdown should contain &quot;All&quot; if the total items' count is less than the maximum <em>Item Count</em> value.  Changed /includes/functions/extra_functions/products_pagination_functions.php.</li>
+  </ul></li>
+  <li>v1.4.9, 2014-07-13:<ul>
+    <li>Include updates for Zen Cart v1.5.2 and v1.5.3 compatibility, changed:<ol>
+      <li>/includes/init_includes/overrides/init_canonical.php</li>
+    </ol></li>
+  </ul></li>
 </ul>
 
 </body>
