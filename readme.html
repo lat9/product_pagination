@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<title>Products Pagination Plugin (Zen-Cart 1.3.9/1.5.0/1.5.1/1.5.2/1.5.3)</title>
+<title>Products Pagination Plugin (Zen-Cart 1.3.9/1.5.0/1.5.1/1.5.2/1.5.3/1.5.4)</title>
 
 <style type="text/css">
 <!--
@@ -51,7 +51,6 @@ ul li ul {
   padding-left: 0;
 }
 .changed {
-  color: blue;
 }
 .added {
   color: green;
@@ -62,8 +61,8 @@ ul li ul {
 
 <body>
 <a name="top" id="top"></a>
-<h1>Product Pagination for Zen Cart 1.3.9, 1.5.0, 1.5.1, 1.5.2, 1.5.3</h1>
-<h3>Version 1.4.9 by lat9.  Copyright &copy; 2010-2014, <a href="http://vinosdefrutastropicales.com" target="_blank">Vinos de Frutas Tropicales</a></h3>
+<h1>Product Pagination for Zen Cart 1.3.9, 1.5.0, 1.5.1, 1.5.2, 1.5.3, 1.5.4</h1>
+<h3>Version 1.5.0 by lat9.  Copyright &copy; 2010-2015, <a href="http://vinosdefrutastropicales.com" target="_blank">Vinos de Frutas Tropicales</a></h3>
 <p>Current Support Thread at Zen Cart Forums: <a href="http://www.zen-cart.com/forum/showthread.php?t=169227">http://www.zen-cart.com/forum/showthread.php?t=169227</a></p>
 
 <h2>What it does</h2>
@@ -87,7 +86,7 @@ ul li ul {
 <li>reviews</li>
 <li>specials</li>
 </ul>
-<p>The updated display looks like <a target="_blank" href="http://www.latitude9needlearts.com/index.php?main_page=product_info&amp;cPath=5&amp;products_id=11">this</a>.  Links to the first and last products in the category (or page groups for the &quot;other&quot; pages) are always displayed, and you control the maximum number of links to be shown.  When you hover over a link on a product-information page, the name of the product associated with that link is displayed by the browser.</p>
+<p>The updated display looks like <a target="_blank" href="http://vinosdefrutastropicales.com/index.php?main_page=product_info&cPath=2_6&products_id=3">this</a>.  Links to the first and last products in the category (or page groups for the &quot;other&quot; pages) are always displayed, and you control the maximum number of links to be shown.  When you hover over a link on a product-information page, the name of the product associated with that link is displayed by the browser.</p>
 <p>Starting with v1.3.0, there are optional (default: <em>false</em>) controls in your admin's <em>Configuration->Products Pagination</em> that enable you to display a page-select drop-down where your visitors can choose which page of the display to go to next and an item-count drop-down where your visitors can choose how many items to view per display page.  These controls appear <em>only</em> on the "Other pages to link".</p>
 
 <h2>How to use it</h2>
@@ -192,6 +191,16 @@ ul li ul {
     <li>Include updates for Zen Cart v1.5.2 and v1.5.3 compatibility, changed:<ol>
       <li>/includes/init_includes/overrides/init_canonical.php</li>
     </ol></li>
+  </ul></li>
+  <li>v1.5.0, 2015-03-26:<ul>
+    <li>CHANGE: Include additional classes to enable styling for various display viewport sizes.</li>
+    <li>CHANGE: Move the init_canonical.php modification to the base init_includes directory, removing it from the init_includes/overrides directory &mdash; making it easier to upgrade.</li>
+    <li>The following files were <span class="changed">changed</span>/<span class="added">added</span>/<span class="removed">removed</span>:<ul>
+      <li class="changed">/includes/classes/split_page_results.php</li>
+      <li class="added">/includes/init_includes/init_canonical.php</li>
+      <li class="removed">/includes/init_includes/overrides/init_canonical.php</li>
+      <li class="changed">/includes/templates/YOUR_TEMPLATE/templates/tpl_products_next_previous.php</li>
+    </ul></li>
   </ul></li>
 </ul>
 
