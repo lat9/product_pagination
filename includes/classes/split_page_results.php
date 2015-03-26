@@ -175,10 +175,10 @@ class splitPageResults extends base {
         $display_links_string .= '&nbsp;';
 
       } else {
-        $ulClass    = '';
+        $ulClass    = ' class="pagination-links"';
       
         if (PRODUCTS_PAGINATION_DISPLAY_PAGEDROP == 'true' || PRODUCTS_PAGINATION_PRODUCT_COUNT == 'true') {
-          $ulClass = ' class="pp_float"';
+          $ulClass = ' class="pp_float pagination-links"';
         }
       
         $display_links_string .= '<ul' . $ulClass . '>';

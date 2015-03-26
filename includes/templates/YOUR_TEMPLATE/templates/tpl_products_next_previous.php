@@ -25,7 +25,7 @@
     $display_next_link  = ($position == $products_last_index) ? false : true;
 ?>
   <div class="ppNextPrevCounter">
-    <p<?php echo (PRODUCTS_PAGINATION_LISTING_LINK == 'true') ? ' class="back"' : '';?>><?php echo PP_PREV_NEXT_PRODUCT . ($position+1) . PP_PREV_NEXT_PRODUCT_SEP . $counter; ?></p>
+    <p<?php echo (PRODUCTS_PAGINATION_LISTING_LINK == 'true') ? ' class="back pagination-list"' : '';?>><?php echo PP_PREV_NEXT_PRODUCT . ($position+1) . PP_PREV_NEXT_PRODUCT_SEP . $counter; ?></p>
 <?php
     if (PRODUCTS_PAGINATION_LISTING_LINK == 'true') {
 ?>
@@ -38,7 +38,7 @@
 <?php
     }
 ?>
-  <div class="pagination">
+  <div class="pagination pagination-links">
     <ul>
 <?php
     products_next_prev_link($previous_position, PP_TEXT_PREVIOUS, $display_prev_link, ' class="prevnext"');
