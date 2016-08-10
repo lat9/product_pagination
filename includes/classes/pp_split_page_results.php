@@ -1,36 +1,28 @@
 <?php
-/**
- * split_page_results Class.
- *
- * @package classes
- * @copyright Copyright 2003-2012 Zen Cart Development Team
- * @copyright Portions Copyright 2003 osCommerce
- * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
- * @version GIT: $Id: Author: Ian Wilson  Modified in v1.6.0 $
- */
+// -----
+// Part of the "Product Pagination" plugin by lat9 (lat9@vinosdefrutastropicales.com)
+// Copyright (c) 2010-2016 Vinos de Frutas Tropicales
+// 
 if (!defined('IS_ADMIN_FLAG')) {
-  die('Illegal Access');
+    die('Illegal Access');
 }
-/**
- * Split Page Result Class
- *
- * An sql paging class, that allows for sql reslt to be shown over a number of pages using  simple navigation system
- * Overhaul scheduled for subsequent release
- *
- * @package classes
- */
-class splitPageResults extends base {
-  var $sql_query, $number_of_rows, $current_page_number, $number_of_pages, $number_of_rows_per_page, $page_name;
-  var $formSuffix; /*v1.4.5-a-lat9*/
 
-  /* class constructor */
-  function __construct($query, $max_rows, $count_key = '*', $page_holder = 'page', $debug = false, $countQuery = "") {
-    global $db;
+// -----
+// This class, included by the main split_pages_result.php class when the plugin is enabled, overrides the name/handling of that
+// base class.
+//
+class splitPageResults extends base 
+{
+    var $sql_query, $number_of_rows, $current_page_number, $number_of_pages, $number_of_rows_per_page, $page_name;
+    var $formSuffix;
+
+    public function __construct($query, $max_rows, $count_key = '*', $page_holder = 'page', $debug = false, $countQuery = "") 
+    {
+        global $db;
     
-    $this->formSuffix = ''; /*v1.4.5-a-lat9*/
-    $max_rows = ($max_rows == '' || $max_rows == 0) ? 20 : $max_rows;
+        $this->formSuffix = '';
+        $max_rows = ($max_rows == '' || $max_rows == 0) ? 20 : $max_rows;
 
-//-bof-lat9-Products Pagination-See if max-display override in place
     $this->minimum_rows = $max_rows;
     if (PRODUCTS_PAGINATION_OTHER == 'true' && in_array($_GET['main_page'], explode(',', PRODUCTS_PAGINATION_OTHER_MAIN_PAGES)) && PRODUCTS_PAGINATION_PRODUCT_COUNT == 'true') {    
       $sprCountArray = explode(',', PRODUCTS_PAGINATION_COUNT_VALUES);
@@ -51,7 +43,6 @@ class splitPageResults extends base {
         $max_rows = $this->minimum_rows;
       }
     }
-//-eof-lat9-Products Pagination
 
     $this->sql_query = preg_replace("/\n\r|\r\n|\n|\r/", " ", $query);
     if ($countQuery != "") $countQuery = preg_replace("/\n\r|\r\n|\n|\r/", " ", $countQuery);
@@ -276,15 +267,15 @@ class splitPageResults extends base {
     }
   }
 
-//-bof-lat9 Products Pagination - Common formatting function
-  private function formatPageLink($title, $name, $page_link_parms, $flag=true, $extra_class='') {
-    global $request_type;
-    if ($flag) {
-      $returnValue = '<li><a href="' . zen_href_link($_GET['main_page'], $page_link_parms, $request_type, false) . '"' . $extra_class . ' title="' . htmlentities(zen_clean_html($title), ENT_COMPAT, CHARSET, true) . '">' . $name . '</a></li>';
-    } else {
-      $returnValue = '<li><span class="prevnext disablelink">' . $name . '</span></li>';
+
+    private function formatPageLink ($title, $name, $page_link_parms, $flag=true, $extra_class='') 
+    {
+        global $request_type;
+        if ($flag) {
+            $returnValue = '<li><a href="' . zen_href_link ($_GET['main_page'], $page_link_parms, $request_type, false) . '"' . $extra_class . ' title="' . htmlentities (zen_clean_html($title), ENT_COMPAT, CHARSET, true) . '">' . $name . '</a></li>';
+        } else {
+            $returnValue = '<li><span class="prevnext disablelink">' . $name . '</span></li>';
+        }
+        return $returnValue;
     }
-    return $returnValue;
-  }
-//-eof-lat9
 }
