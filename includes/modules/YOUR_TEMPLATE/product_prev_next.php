@@ -11,9 +11,16 @@
 if (!defined('IS_ADMIN_FLAG')) {
   die('Illegal Access');
 }
-// bof: previous next
-if (PRODUCT_INFO_PREVIOUS_NEXT != 0) {
 
+//-bof-product_pagination-lat9  *** 1 of 1 ***
+// -----
+// If the "Product Pagination" plugin is installed and enabled, load its version of the products' prev/next display.
+//
+if (defined ('PRODUCTS_PAGINATION_ENABLED') && PRODUCTS_PAGINATION_ENABLED == 'true') {
+    require (DIR_WS_MODULES . zen_get_module_directory ('pp_product_prev_next'));
+// bof: previous next
+} elseif (PRODUCT_INFO_PREVIOUS_NEXT != 0) {
+//-eof-product_pagination-lat9  *** 1 of 1 ***
   // sort order
   switch(PRODUCT_INFO_PREVIOUS_NEXT_SORT) {
     case (0):
