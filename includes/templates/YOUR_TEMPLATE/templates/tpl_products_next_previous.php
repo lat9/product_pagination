@@ -14,7 +14,14 @@
  Thanks to Nirvana, Yoja and Joachim de Boer
  Modifications: Linda McGrath osCommerce@WebMakers.com
 */
-
+//-bof-product_pagination-lat9  *** 1 of 2 ***
+// -----
+// If the "Product Pagination" plugin is installed and enabled, use that plugin's version of the next/previous display formatting.
+//
+if (defined ('PRODUCTS_PAGINATION_ENABLED') && PRODUCTS_PAGINATION_ENABLED == 'true') {
+    require ($template->get_template_dir ('/tpl_pp_products_next_previous.php', DIR_WS_TEMPLATE, $current_page_base, 'templates'). '/tpl_pp_products_next_previous.php');
+} else {
+//-eof-product_pagination-lat9  *** 1 of 2 ***
 ?>
 <div class="navNextPrevWrapper centeredContent">
 <?php
@@ -31,3 +38,7 @@
   }
 ?>
 </div>
+<?php
+//-bof-product_pagination-lat9  *** 2 of 2 ***
+}
+//-eof-product_pagination-lat9  *** 2 of 2 ***
