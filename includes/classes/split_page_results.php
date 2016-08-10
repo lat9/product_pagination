@@ -6,7 +6,7 @@
  * @copyright Copyright 2003-2012 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
  * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
- * @version GIT: $Id: Author: Ian Wilson  Fri Aug 17 17:54:58 2012 +0100 Modified in v1.5.1 $
+ * @version GIT: $Id: Author: Ian Wilson  Modified in v1.6.0 $
  */
 if (!defined('IS_ADMIN_FLAG')) {
   die('Illegal Access');
@@ -24,10 +24,10 @@ class splitPageResults extends base {
   var $formSuffix; /*v1.4.5-a-lat9*/
 
   /* class constructor */
-  function splitPageResults($query, $max_rows, $count_key = '*', $page_holder = 'page', $debug = false, $countQuery = "") {
+  function __construct($query, $max_rows, $count_key = '*', $page_holder = 'page', $debug = false, $countQuery = "") {
     global $db;
     
-    $formSuffix = ''; /*v1.4.5-a-lat9*/
+    $this->formSuffix = ''; /*v1.4.5-a-lat9*/
     $max_rows = ($max_rows == '' || $max_rows == 0) ? 20 : $max_rows;
 
 //-bof-lat9-Products Pagination-See if max-display override in place
@@ -43,7 +43,7 @@ class splitPageResults extends base {
         }
       }
 
-      if (isset($_GET) && zen_not_null($_GET['pagecount'])) {
+      if (isset ($_GET['pagecount']) && zen_not_null ($_GET['pagecount'])) {
         $max_rows = $_GET['pagecount'];
         $pagecnt  = $max_rows;
 
@@ -210,10 +210,10 @@ class splitPageResults extends base {
             if ($display_range[0] > 1 && $i == $display_range[0]) $display_links_string .= '<li> ... </li>';
             // loop through all pages. if first, last, or in range, display
             if ($i == 0 || $i == $last_page_index || in_array($i, $display_range)) {
-              $display_links_string .= $this->formatPageLink(sprintf(PREVNEXT_TITLE_PAGE_NO, $pNum), $pNum, $parameters . $this->page_name . '=' . $pNum, true, ($pNum == $this->current_page_number) ? ' class="currentpage"' : '');
+              $display_links_string .= $this->formatPageLink(sprintf(PREVNEXT_TITLE_PAGE_NO, $pNum), $pNum, $parameters . $this->page_name . '=' . $pNum, true, ($pNum == $this->current_page_number) ? ' class="mid currentpage"' : ' class="mid"');
             }
 
-            if ($display_range[PRODUCTS_PAGINATION_MID_RANGE-1] < $last_page_index-1 && $i == $display_range[PRODUCTS_PAGINATION_MID_RANGE-1]) $display_links_string .= '<li> ... </li>';
+            if ($display_range[PRODUCTS_PAGINATION_MID_RANGE-1] < $last_page_index-1 && $i == $display_range[PRODUCTS_PAGINATION_MID_RANGE-1]) $display_links_string .= '<li class="mid"> &hellip; </li>';
 
           }
         }
