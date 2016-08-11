@@ -21,11 +21,20 @@ if (!defined('IS_ADMIN_FLAG')) {
  */
 //-bof-product_pagination-lat9  *** 1 of 2 ***
 // -----
-// If the "Product Pagination" plugin is enabled, include its version of the splitPageResults class instead of the standard.
+// This module gets auto-loaded way-early in the startup processing, but we need the database configuration loaded to "know"
+// whether or not to use the plugin's override version of the class, so we "defer" the load of the class definition (handled
+// in the plugin's auto-loader) until after the configuration has been loaded.
 //
-if (defined ('PRODUCTS_PAGINATION_ENABLED') && PRODUCTS_PAGINATION_ENABLED == 'true') {
-    require (DIR_WS_CLASSES . 'pp_split_page_results.php');
-} else {
+if (defined ('STORE_NAME')) {
+    // -----
+    // If the "Product Pagination" plugin is enabled for use on "other pages", include its version of the splitPageResults class instead of the standard.
+    //
+    if (defined ('PRODUCTS_PAGINATION_ENABLE') && PRODUCTS_PAGINATION_ENABLE == 'true' &&
+        PRODUCTS_PAGINATION_OTHER == 'true' && PRODUCTS_PAGINATION_OTHER_MAIN_PAGES != '' && isset ($_GET['main_page']) &&
+        in_array ($_GET['main_page'], explode (',', PRODUCTS_PAGINATION_OTHER_MAIN_PAGES))) {
+        require (DIR_WS_CLASSES . 'pp_split_page_results.php');
+        
+    } else {
 //-eof-product_pagination-lat9  *** 1 of 2 ***
 class splitPageResults extends base {
   var $sql_query, $number_of_rows, $current_page_number, $number_of_pages, $number_of_rows_per_page, $page_name;
@@ -208,5 +217,6 @@ class splitPageResults extends base {
   }
 }
 //-bof-product_pagination-lat9  *** 2 of 2 ***
-}
+    }  //-"Product Pagination" plugin not active, use base class
+}  //-Database configuration has been read
 //-eof-product_pagination-lat9  *** 2 of 2 ***
