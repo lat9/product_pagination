@@ -5,5 +5,5 @@
 //                               
 $autoLoadConfig[200][] = array (
     'autoType' => 'init_script',
-    'loadFile' => 'init_products_pagination_admin.php'
+    'loadFile' => 'init_product_pagination_admin.php'
 );
