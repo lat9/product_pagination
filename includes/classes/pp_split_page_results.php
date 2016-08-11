@@ -202,14 +202,14 @@ class splitPageResults extends base
                 $extra_links .= ppCountDropdown ($this->number_of_rows, $this->number_of_rows_per_page, $this->formSuffix);
             }
             if ($extra_links != '') {
-                $display_links_string .= '<div class="pp-selections">' . $extra_links . '<div class="clearBoth"></div></div>';
+                $extra_links = '<div class="pp-selections">' . $extra_links . '<div class="clearBoth"></div></div>';
             }
             
             $display_links_string .= '<div class="clearBoth"></div>';
         }
 
         if ($display_links_string != '&nbsp;') {
-            $display_links_string = '<div class="ppNextPrevWrapper"><div class="prod-pagination">' . $display_links_string . '</div></div>';
+            $display_links_string = '<div class="ppNextPrevWrapper"><div class="prod-pagination">' . $display_links_string . '</div>' . $extra_links . '</div>';
         }  
 
         return ($display_links_string == '&nbsp;<strong class="current">1</strong>&nbsp;') ? '&nbsp;' : $display_links_string;
