@@ -18,7 +18,7 @@
 // -----
 // If the "Product Pagination" plugin is installed and enabled, use that plugin's version of the next/previous display formatting.
 //
-if (defined ('PRODUCTS_PAGINATION_ENABLED') && PRODUCTS_PAGINATION_ENABLED == 'true') {
+if (defined ('PRODUCTS_PAGINATION_ENABLE') && PRODUCTS_PAGINATION_ENABLE == 'true') {
     require ($template->get_template_dir ('/tpl_pp_products_next_previous.php', DIR_WS_TEMPLATE, $current_page_base, 'templates'). '/tpl_pp_products_next_previous.php');
 } else {
 //-eof-product_pagination-lat9  *** 1 of 2 ***

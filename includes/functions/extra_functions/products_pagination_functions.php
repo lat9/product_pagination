@@ -1,26 +1,4 @@
 <?php
-// ----- PRODUCTS_PAGINATION -----
-// The following variables are preset by /includes/modules/YOUR_TEMPLATE/product_prev_next.php:
-//
-// $position ............... Array index of currently-displayed product
-// $next_position .......... Array index of next product in the list
-// $prev_position .......... Array index of previous product in the list
-// $id_array ............... Array that contains the sorted product IDs
-// $product_names_array .... Array that contains the sorted product names
-// $products_found_count ... The base-1 count of all products for the category
-// 
-function products_next_prev_link ($offset, $name, $flag=true, $extra_class='') {
-  global $page_link_parms, $id_array, $product_names_array;
-  if ($flag) {
-?>
-      <li><a href="<?php echo zen_href_link(zen_get_info_page($id_array[$offset]), $page_link_parms . $id_array[$offset], 'NONSSL', false); ?>"<?php echo $extra_class; ?> title="<?php echo htmlentities(zen_clean_html($product_names_array[$offset]), ENT_COMPAT, CHARSET); ?>"><?php echo $name; ?></a></li>
-<?php
-  } else {
-?>
-      <li><span class="prevnext disablelink"><?php echo $name; ?></span></li>
-<?php
-  }
-}
 
 function ppPageDropdown ($lastPage, $whichPage, $formSuffix) {
   global $show_top_submit_button, $show_bottom_submit_button;
@@ -115,4 +93,19 @@ function ppCreateHiddenInputs ($hiddenVar) {
     $inputVars .= (isset($_GET[$varName]) ? zen_draw_hidden_field ($varName, $_GET[$varName]) : '');
   }  
   return $inputVars;
+}
+
+// -----
+// This function inspects the plugin's configuration and returns a boolean indication as to whether the current page
+// qualifies as an "other" page being handled by "Product Pagination".
+//
+function ppOtherSplitPageActive ()
+{
+    $is_active = false;
+    if (defined ('PRODUCTS_PAGINATION_ENABLE') && PRODUCTS_PAGINATION_ENABLE == 'true') {
+        if (PRODUCTS_PAGINATION_OTHER == 'true' && zen_not_null (PRODUCTS_PAGINATION_OTHER_MAIN_PAGES) && isset ($_GET['main_page'])) {
+            $is_active = in_array ($_GET['main_page'], explode (',', PRODUCTS_PAGINATION_OTHER_MAIN_PAGES));
+        }
+    }
+    return $is_active;
 }
