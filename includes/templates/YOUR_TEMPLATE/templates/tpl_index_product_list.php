@@ -6,14 +6,16 @@
  * Displays product-listing when a particular category/subcategory is selected for browsing
  *
  * @package templateSystem
- * @copyright Copyright 2003-2015 Zen Cart Development Team
+ * @copyright Copyright 2003-2016 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
  * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
- * @version $Id: tpl_index_product_list.php  Modified in v1.5.5 $
+ * @version $Id: picaflor-azul Wed Jan 13 18:44:28 2016 -0500 New in v1.5.5 $
  */
 ?>
 <div class="centerColumn" id="indexProductList">
 
+<div id="cat-top" class="group">
+<div id="cat-left" class="back">
 <h1 id="productListHeading"><?php echo $current_categories_name; ?></h1>
 
 <?php
@@ -26,6 +28,7 @@ if (PRODUCT_LIST_CATEGORIES_IMAGE_STATUS == 'true') {
   }
 } // categories_image
 ?>
+</div>
 
 <?php
 // categories_description
@@ -33,6 +36,11 @@ if (PRODUCT_LIST_CATEGORIES_IMAGE_STATUS == 'true') {
 ?>
 <div id="indexProductListCatDescription" class="content"><?php echo $current_categories_description;  ?></div>
 <?php } // categories_description ?>
+</div>
+
+<?php if ($listing->RecordCount()) { ?>
+<div id="filter-wrapper" class="group">
+<?php } ?>
 
 <?php
   $check_for_alpha = $listing_sql;
@@ -71,7 +79,6 @@ if (PRODUCT_LIST_CATEGORIES_IMAGE_STATUS == 'true') {
 
   // draw sort
   echo zen_draw_hidden_field('sort', $_GET['sort']);
-  
 //-bof-products_pagination-lat9  *** 1 of 1 ***
   if (isset($_GET['pagecount']) && zen_not_null($_GET['pagecount'])) echo zen_draw_hidden_field('pagecount', $_GET['pagecount']);
 //-eof-products_pagination-lat9  *** 1 of 1 ***
@@ -81,14 +88,22 @@ if (PRODUCT_LIST_CATEGORIES_IMAGE_STATUS == 'true') {
     echo zen_draw_pull_down_menu('filter_id', $options, (isset($_GET['filter_id']) ? $_GET['filter_id'] : ''), 'onchange="this.form.submit()"');
   }
 
+
+
+
   // draw alpha sorter
-  require(DIR_WS_MODULES . zen_get_module_directory(FILENAME_PRODUCT_LISTING_ALPHA_SORTER));
+require(DIR_WS_MODULES . zen_get_module_directory(FILENAME_PRODUCT_LISTING_ALPHA_SORTER));
 ?>
 </form>
 <?php
   }
 ?>
-<br class="clearBoth" />
+
+<?php // end wrapper ?>
+<?php if ($listing->RecordCount()) { ?>
+</div>
+<?php } ?>
+
 
 <?php
 /**

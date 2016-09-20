@@ -1,8 +1,11 @@
-.ppNextPrevWrapper { clear: both; text-align: center; }
-.ppNextPrevCounter { text-align: center; margin: 0 auto; }
+.navSplitPagesLinks .ppNextPrevWrapper { clear: both; text-align: center; float: right; }
 
-.ppNextPrevWrapper .prod-pagination { padding: 5px; display: inline-flex; margin: 0 auto; clear: both; }
+.ppNextPrevCounter { text-align: center; margin: 0 auto; }
+.ppNextPrevCounter p { margin: 0; }
+
+.ppNextPrevWrapper .prod-pagination { padding: 5px; display: inline-flex; margin: 0 auto; clear: both; float: left; }
 .ppNextPrevWrapper .prod-pagination.prevnextReturn { margin: 0; clear: none; float: right; }
+.ppNextPrevWrapper .pagination-links { width: 100%; text-align: center; margin-bottom: 1%; }
 
 .ppNextPrevWrapper .prod-pagination ul { margin: 0 auto; padding: 0; }
 .ppNextPrevWrapper .prod-pagination li { list-style-type: none; display: inline; padding-bottom: 1px; }
@@ -15,10 +18,12 @@
 .ppNextPrevWrapper .prod-pagination .pp_page, .ppNextPrevWrapper .prod-pagination .pp_count { float: right; padding-left: 7px; }
 .pp_count { float: right; }
 .pp_page { float: left; }
-.pp-selections { margin-top: 5px; }
+.pp-selections { margin-top: 5px; float: left; }
 .pp-selections select { width: auto; }
 
 .prod-list-wrap { height: auto; }
-.navSplitPagesLinks.back { float: none; }
+.navSplitPagesLinks.back { float: right; }
 #productsListingBottomNumber, #allProductsListingBottomNumber, #allProductsListingTopNumber, #productsListingTopNumber, #featuredProductsListingBottomNumber, #featuredProductsListingTopNumber, #newProductsDefaultListingTopNumber, #newProductsDefaultListingBottomNumber { width: auto; margin-left: 0; }
 #productsListingListingBottomLinks, #allProductsListingTopLinks, #allProductsListingBottomLinks, #featuredProductsListingTopLinks, #featuredProductsListingBottomLinks, #newProductsDefaultListingTopLinks, #newProductsDefaultListingBottomLinks, #productsListingListingTopLinks { width: auto; margin-left: 0; }
+
+.button-top { clear: right; margin: inherit; }
