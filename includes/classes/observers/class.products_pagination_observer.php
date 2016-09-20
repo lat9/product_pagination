@@ -152,7 +152,7 @@ class products_pagination_observer extends base
                 $return_html .= '  </div>' . PHP_EOL;
             }
             
-            $return_html .= '</div>' . PHP_EOL;  //-END ppNextPrevCounter
+            $return_html .= '<div class="clearBoth"></div></div>' . PHP_EOL;  //-END ppNextPrevCounter
             
             $return_html .= '<div class="prod-pagination pagination-links">' . PHP_EOL;
             $return_html .= '  <ul>' . PHP_EOL;

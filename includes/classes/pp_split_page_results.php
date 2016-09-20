@@ -15,7 +15,6 @@ if (!defined('IS_ADMIN_FLAG')) {
 class splitPageResults extends base 
 {
     var $sql_query, $number_of_rows, $current_page_number, $number_of_pages, $number_of_rows_per_page, $page_name;
-    var $formSuffix;
 
     public function __construct ($query, $max_rows, $count_key = '*', $page_holder = 'page', $debug = false, $countQuery = '') 
     {
@@ -23,9 +22,12 @@ class splitPageResults extends base
         
         $this->debug = array ();
     
-        $this->formSuffix = '';
-        $max_rows = ($max_rows == '' || $max_rows == 0) ? 20 : $max_rows;
+        $max_rows = ($max_rows == '' || $max_rows <= 0) ? 20 : $max_rows;
         $this->minimum_rows = $max_rows;
+        
+        $this->input_page_suffix = 1;
+        $this->input_pagecount_suffix = 1;
+        $this->hidden_input_added = false;
         
         // -----
         // If the plugin has been configured to provide an items-per-page dropdown ...
@@ -34,14 +36,23 @@ class splitPageResults extends base
             $page_count_array = explode (',', PRODUCTS_PAGINATION_COUNT_VALUES);
             if (count ($page_count_array) > 0) {
                 sort ($page_count_array, SORT_NUMERIC);
-                if ($page_count_array[0] != '*' && ((int)$page_count_array[0]) != 0) { 
+                if ($page_count_array[0] != '*' && ((int)$page_count_array[0]) >= 0) { 
                     $this->minimum_rows = $page_count_array[0];
-                } elseif (count ($page_count_array) > 1 && $page_count_array[1] != '*' && ((int)$page_count_array[1]) != 0) {
+                } elseif (count ($page_count_array) > 1 && $page_count_array[1] != '*' && ((int)$page_count_array[1]) >= 0) {
                     $this->minimum_rows = $page_count_array[1];
                 }
             }
 
+            // -----
+            // Since the pagecount value is now a $_GET variable, need to sanitize its value prior to use, making sure
+            // that the value is one of the values configured; otherwise, it's set to the minimum item count.
+            //
             if (isset ($_GET['pagecount']) && zen_not_null ($_GET['pagecount'])) {
+                if ($_GET['pagecount'] != 'all') {
+                    if (!in_array ($_GET['pagecount'], $page_count_array)) {
+                        $_GET['pagecount'] = $this->minimum_rows;
+                    }
+                }
                 $max_rows = $_GET['pagecount'];
                 $pagecnt  = $max_rows;
             } else {
@@ -74,8 +85,6 @@ class splitPageResults extends base
         }
         $this->current_page_number = $page;
 
-        $this->number_of_rows_per_page = $max_rows;
-
         $pos_to = strlen ($this->countQuery);
 
         $query_lower = strtolower ($this->countQuery);
@@ -107,9 +116,20 @@ class splitPageResults extends base
 
         $count = $db->Execute ($count_query);
 
+        // -----
+        // Now that the items/page is a $_GET variable, need to do some additional sanitization.  There's a case where
+        // the pagecount value has been forced to one of the configured values, but the current selection has fewer than
+        // that number.  If that condition is found, force the items-per-page to the minimum value.
+        //
+        $this->number_of_rows_per_page = $max_rows;
         $this->number_of_rows = $count->fields['total'];
-        if (isset ($pagecnt) && $pagecnt == 'all') {
-            $this->number_of_rows_per_page = ($this->number_of_rows > 0) ? $this->number_of_rows : 20;
+        if (isset ($pagecnt)) {
+            if ($pagecnt == 'all') {
+                $this->number_of_rows_per_page = ($this->number_of_rows > 0) ? $this->number_of_rows : 20;
+            } elseif ($pagecnt > $this->number_of_rows) {
+                $this->number_of_rows_per_page = $this->minimum_rows;
+                $_GET['pagecount'] = $this->minimum_rows;
+            }
         }
         $this->number_of_pages = ceil ($this->number_of_rows / $this->number_of_rows_per_page);
 
@@ -130,7 +150,6 @@ class splitPageResults extends base
     function display_links ($max_page_links, $parameters = '') 
     {
         global $request_type;
-        $this->formSuffix = ($this->formSuffix == '') ? '1' : '2';
         if ($max_page_links == '') {
             $max_page_links = 1;
         }
@@ -192,27 +211,25 @@ class splitPageResults extends base
     
             $display_links_string .= $this->formatPageLink( PREVNEXT_TITLE_NEXT_PAGE, PP_TEXT_NEXT, $parameters . $this->page_name . '=' . ($this->current_page_number + 1), ($this->current_page_number == $this->number_of_pages) ? false : true, ' class="prevnext"');
             
-            $display_links_string .= '</ul>';
+            $display_links_string .= '</ul><div class="clearBoth"></div>';
+        }
             
-            $extra_links = '';
-            if (PRODUCTS_PAGINATION_DISPLAY_PAGEDROP == 'true') {
-                $extra_links .= ppPageDropdown ($this->number_of_pages, $this->current_page_number, $this->formSuffix);
-            }
-            if (PRODUCTS_PAGINATION_PRODUCT_COUNT == 'true') {
-                $extra_links .= ppCountDropdown ($this->number_of_rows, $this->number_of_rows_per_page, $this->formSuffix);
-            }
-            if ($extra_links != '') {
-                $extra_links = '<div class="pp-selections">' . $extra_links . '<div class="clearBoth"></div></div>';
-            }
-            
-            $display_links_string .= '<div class="clearBoth"></div>';
+        $extra_links = '';
+        if (PRODUCTS_PAGINATION_DISPLAY_PAGEDROP == 'true') {
+            $extra_links .= $this->createPageDropdown ($this->number_of_pages, $this->current_page_number);
+        }
+        if (PRODUCTS_PAGINATION_PRODUCT_COUNT == 'true') {
+            $extra_links .= $this->createCountDropdown ($this->number_of_rows, $this->number_of_rows_per_page);
+        }
+        if ($extra_links != '') {
+            $extra_links = '<div class="pp-selections">' . $extra_links . '<div class="clearBoth"></div></div>';
         }
 
-        if ($display_links_string != '&nbsp;') {
-            $display_links_string = '<div class="ppNextPrevWrapper"><div class="prod-pagination">' . $display_links_string . '</div>' . $extra_links . '</div>';
+        if ($display_links_string != '&nbsp;' || $extra_links != '') {
+            $display_links_string = '<div class="ppNextPrevWrapper"><div class="prod-pagination">' . $display_links_string . '</div>' . $extra_links . '<div class="clearBoth"></div></div>';
         }  
 
-        return ($display_links_string == '&nbsp;<strong class="current">1</strong>&nbsp;') ? '&nbsp;' : $display_links_string;
+        return $display_links_string;
     }
 
     // display number of total products found
@@ -243,5 +260,121 @@ class splitPageResults extends base
             $returnValue = '<li><span class="prevnext disablelink">' . $name . '</span></li>';
         }
         return $returnValue;
+    } 
+
+    private function createCountDropdown ($numItems, $whichCount) 
+    {
+        $dropdown = '';
+        $countArray = explode(',', PRODUCTS_PAGINATION_COUNT_VALUES);
+        if (count($countArray) > 0) {
+            $pageArray = array();
+            for ($i=0, $n=count ($countArray), $done_all = false; $i<$n; $i++) {
+                if ($countArray[$i] == '*') {
+                    if (!$done_all) {
+                        $pageArray[] = array( 'id' => 'all', 'text' => PP_TEXT_ALL );
+                        $done_all = true;
+                    }
+                } elseif ($numItems > $countArray[$i]) {
+                    $pageArray[] = array( 'id' => $countArray[$i], 'text' => $countArray[$i]);
+                } elseif (!$done_all) {
+                    $pageArray[] = array ('id' => 'all', 'text' => PP_TEXT_ALL);
+                    $done_all = true;
+                }
+            }
+
+            //-----
+            // Only display the dropdown if there's more than one item counts to display
+            //    
+            if (count ($pageArray) > 1) {
+                // -----
+                // If called from either an listing or the advanced search results page and "multiple products add to cart" is
+                // enabled, there's already a <form> active so don't want to insert a form into a form.
+                //
+                // Need to add that suffix to the dropdown's variable name in case both upper- and lower-links are enabled.  If not, then
+                // both variables (top and bottom) would have the same variable name, rendering the top block useless.
+                //
+                if ($this->formCreated ()) {
+                    $form = '';
+                    $end_form = '';
+                    $var_name = 'pp_pagecount' . $this->input_pagecount_suffix;
+                    $hidden_vars = ($this->hidden_var_added) ? '' : zen_draw_hidden_field ('pp_which_input', '0', 'id="pp-which-input"');
+                    $onchange = "document.getElementById('pp-which-input').value = 'pc-" . $this->input_pagecount_suffix . "'; ";
+                    $this->hidden_var_added = true;
+                } else {
+                    $formPage = ($_GET['main_page'] == FILENAME_ADVANCED_SEARCH_RESULT) ? FILENAME_ADVANCED_SEARCH : $_GET['main_page'];
+                    $form = zen_draw_form ('pp_count_form', zen_href_link ($formPage, zen_get_all_get_params (array ('pagecount'))), 'get');
+                    $end_form = '</form>';
+                    $var_name = 'pagecount';
+                    $hidden_vars = $this->createHiddenVars ('page');
+                    $onchange = '';
+                }
+                $dropdown_id = 'id="pp-pc-' . $this->input_pagecount_suffix . '"';
+          
+                $whichCount = (isset($_GET['pagecount']) && $_GET['pagecount'] == 'all') ? 'all' : $whichCount;
+          
+                $dropdown  = PHP_EOL . '<div class="pp_count">' . $form . zen_hide_session_id();
+
+                $dropdown .= $hidden_vars;
+                $dropdown .= PP_TEXT_ITEMS_PER_PAGE . zen_draw_pull_down_menu ($var_name, $pageArray, $whichCount, $dropdown_id . ' onchange="' . $onchange . 'this.form.submit();"') . $end_form . '</div>' . PHP_EOL;
+                
+                $this->input_pagecount_suffix++;
+            }
+        }
+        return $dropdown;
     }
+    
+    private function createPageDropdown ($lastPage, $current_page) 
+    {
+        $dropdown = '';
+        if ($lastPage > 1) {
+            $pageArray = array();
+            for ($i = 1; $i <= $lastPage; $i++) {
+                $pageArray[] = array ( 'id' => $i, 'text' => $i );
+            }
+            // -----
+            // If called from a page where the "multiple products add to cart" is enabled, the form that's
+            // created is subtly different, since that form "could" have multiple instances (top/bottom) of the page dropdown.
+            //
+            // Need to add that suffix to the dropdown's variable name in case both upper- and lower-links are enabled.  If not, then
+            // both variables (top and bottom) would have the same variable name, rendering the top block useless.
+            //
+            if ($this->formCreated ()) {
+                $form = '';
+                $end_form = '';
+                $var_name = 'pp_page' . $this->input_page_suffix;
+                $hidden_vars = ($this->hidden_var_added) ? '' : zen_draw_hidden_field ('pp_which_input', '0', 'id="pp-which-input"');
+                $onchange = "document.getElementById('pp-which-input').value = 'p-" . $this->input_page_suffix . "'; ";
+                $this->hidden_var_added = true;
+            } else {
+                $form = zen_draw_form ('pp_page_form', zen_href_link ($_GET['main_page'], zen_get_all_get_params (array ('page'))), 'get');
+                $end_form = '</form>';
+                $var_name = 'page';
+                $hidden_vars = $this->createHiddenVars ('pagecount');
+                $onchange = '';
+            }
+            $dropdown_id = 'id="pp-p-' . $this->input_page_suffix . '"';
+
+            $dropdown = PHP_EOL . '<div class="pp_page">' . $form . PP_TEXT_PAGE . zen_draw_pull_down_menu ($var_name, $pageArray, $current_page, $dropdown_id . ' onchange="' . $onchange . 'this.form.submit();"') . $hidden_vars . $end_form . '</div>' . PHP_EOL;
+            
+            $this->input_page_suffix++;
+            
+        }
+        return $dropdown;
+    }
+    
+    private function formCreated ()
+    {
+        global $show_top_submit_button, $show_bottom_submit_button;
+        return ($show_top_submit_button | $show_bottom_submit_button);
+    }
+    
+    private function createHiddenVars ($additional_var = '')
+    {
+        $hidden_vars = ppHiddenVarsList ();
+        if ($additional_var != '') {
+            $hidden_vars[] = $additional_var;
+        }
+        return ppCreateHiddenInputs ($hidden_vars);
+    }
+
 }

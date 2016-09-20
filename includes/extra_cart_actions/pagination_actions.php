@@ -1,23 +1,39 @@
 <?php
-/**
- * @copyright Copyright 2003-2011 Zen Cart Development Team
- * @copyright Portions Copyright 2003 osCommerce
- * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
- * @version $Id: pagination_actions.php 2012-11-21 lat9 $
- */
-if (!defined('IS_ADMIN_FLAG')) {
-  die('Illegal Access');
-}
 // -----
-// If there's a multiple-products-add-to-cart action to be acted upon and neither the top nor bottom add-selected-items-to-cart submit
-// buttons were clicked (i.e. they're both empty), then one of the Product Pagination 'onchange' counts were selected.  'Negate' the add-to-cart
-// request so that the product page or count dropdown have been used, they'll be acted upon by the split_page_results.php class-file.
+// Part of the "Product Pagination" plugin, provided by lat9 (lat9@vinosdefrutastropicales.com)
+// Copyright (C) 2010-2016, Vinos de Frutas Tropicales.
 //
-$zco_notifier->notify('PAGINATION_ACTIONS', array('get' => $_GET, 'post' => $_POST));
-if (isset($_GET['action']) && $_GET['action'] == 'multiple_products_add_product' && (PRODUCTS_PAGINATION_DISPLAY_PAGEDROP == 'true' || PRODUCTS_PAGINATION_PRODUCT_COUNT == 'true') ) {
-  if (isset($_POST) && !isset($_POST['submit1_x']) && !isset($_POST['submit1_y']) && !isset($_POST['submit2_x']) && !isset($_POST['submit2_y'])) {
-    unset($_GET['action']);
-    unset($_REQUEST['action']);
+if (!defined('IS_ADMIN_FLAG')) {
+    die ('Illegal Access');
+}
 
-  }
+// -----
+// If there's a multiple-products-add-to-cart action to be acted upon and the plugin's handling has been configured to
+// present a page- and/or pagecount-dropdown, need to provide some fixups for the follow-on processing.
+//
+if (isset ($_GET['action']) && $_GET['action'] == 'multiple_products_add_product' && (PRODUCTS_PAGINATION_DISPLAY_PAGEDROP == 'true' || PRODUCTS_PAGINATION_PRODUCT_COUNT == 'true') ) {
+    if (isset ($_POST['pp_which_input'])) {
+        $input_info = explode ('-', $_POST['pp_which_input']);
+        if (count ($input_info) == 2) {
+            switch ($input_info[0]) {
+                case 'p':
+                    $base_varname = 'page';
+                    break;
+                case 'pc':
+                    $base_varname = 'pagecount';
+                    break;
+                default:
+                    $base_varname = '';
+                    break;
+            }
+            if ($base_varname != '') {
+                $posted_varname = 'pp_' . $base_varname . $input_info[1];
+                if (isset ($_POST[$posted_varname])) {
+                    $_GET[$base_varname] = $_POST[$posted_varname];
+                    unset ($_GET['action']);
+                    zen_redirect (zen_href_link ($_GET['main_page'], zen_get_all_get_params ()));
+                }
+            }
+        }
+    }
 }

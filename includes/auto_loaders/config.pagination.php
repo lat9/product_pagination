@@ -16,11 +16,6 @@ $autoLoadConfig[41][] = array (
     'loadFile' => 'split_page_results.php'
 );
 
-$autoLoadConfig[181][] = array (
-    'autoType' => 'init_script',
-    'loadFile' => 'init_pagination.php'
-);
-
 $autoLoadConfig[200][] = array (
     'autoType' => 'class',
     'loadFile' => 'observers/class.products_pagination_observer.php'
