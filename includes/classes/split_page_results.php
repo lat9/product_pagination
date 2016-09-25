@@ -27,13 +27,13 @@ if (!defined('IS_ADMIN_FLAG')) {
 //
 if (defined ('STORE_NAME')) {
     // -----
-    // If the "Product Pagination" plugin is enabled for use on "other pages", include its version of the splitPageResults class instead of the standard.
+    // Check to see if the "Product Pagination" plugin is enabled for use on "other pages".  First, check to see if
+    // the plugin's overall operation is enabled for the current page, then (if the template supports the device-switching
+    // as defined by the Zen Cart 1.5.5a "responsive_classic" template) check if the configuration is valid for the
+    // current device-type.
     //
-    if (defined ('PRODUCTS_PAGINATION_ENABLE') && PRODUCTS_PAGINATION_ENABLE == 'true' &&
-        PRODUCTS_PAGINATION_OTHER == 'true' && PRODUCTS_PAGINATION_OTHER_MAIN_PAGES != '' && isset ($_GET['main_page']) &&
-        in_array ($_GET['main_page'], explode (',', PRODUCTS_PAGINATION_OTHER_MAIN_PAGES))) {
+    if ($ppObserver->isPaginationEnabled ('other')) {
         require (DIR_WS_CLASSES . 'pp_split_page_results.php');
-        
     } else {
 //-eof-product_pagination-lat9  *** 1 of 2 ***
 class splitPageResults extends base {

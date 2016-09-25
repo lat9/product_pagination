@@ -9,19 +9,22 @@ if (!defined('IS_ADMIN_FLAG')) {
 // -----
 // There's a bit of trickiness going on here.  The base split_page_results class has been modified so that
 // it won't load if the database configuration hasn't been read, so need to load the class again
-// after the database reads have been done so that the class is defined.
+// after the database reads have been done and the session is established so that the class is defined.
 //
-$autoLoadConfig[41][] = array (
+// Since that class uses a common function provided by the pagination observer, the split_page_results
+// class needs to be loaded after that.
+//
+$autoLoadConfig[117][] = array (
     'autoType' => 'class',
     'loadFile' => 'split_page_results.php'
 );
 
-$autoLoadConfig[200][] = array (
+$autoLoadConfig[116][] = array (
     'autoType' => 'class',
     'loadFile' => 'observers/class.products_pagination_observer.php'
 );
 
-$autoLoadConfig[200][] = array (
+$autoLoadConfig[116][] = array (
     'autoType'   => 'classInstantiate',
     'className'  => 'products_pagination_observer',
     'objectName' => 'ppObserver'

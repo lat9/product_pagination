@@ -4,8 +4,8 @@
 //
 // Starting with v2.0.0 of the plugin, perform the auto-install of the various configuration items.
 //
-define ('PRODUCTS_PAGINATION_VERSION_CURRENT', '2.0.0-beta1');
-define ('PRODUCTS_PAGINATION_VERSION_CURRENT_DATE', '09-xx-2016');
+define ('PRODUCTS_PAGINATION_VERSION_CURRENT', '2.0.0');
+define ('PRODUCTS_PAGINATION_VERSION_CURRENT_DATE', '09-24-2016');
 
 $pp_current_version = PRODUCTS_PAGINATION_VERSION_CURRENT . ' (' . PRODUCTS_PAGINATION_VERSION_CURRENT_DATE . ')';
 
@@ -14,7 +14,7 @@ $configuration = $db->Execute ("SELECT configuration_group_id FROM " . TABLE_CON
 if ($configuration->EOF) {
     $db->Execute("INSERT INTO " . TABLE_CONFIGURATION_GROUP . " 
                     (configuration_group_title, configuration_group_description, sort_order, visible) 
-                    VALUES ('$configurationGroupTitle', 'Superglobals Settings', '1', '1');");
+                    VALUES ('$configurationGroupTitle', 'Product Pagination Settings', '1', '1');");
     $configuration_group_id = $db->Insert_ID(); 
     $db->Execute ("UPDATE " . TABLE_CONFIGURATION_GROUP . " SET sort_order = $configuration_group_id WHERE configuration_group_id = $configuration_group_id LIMIT 1");
 } else {
@@ -27,7 +27,9 @@ if ($configuration->EOF) {
 if (!defined ('PRODUCTS_PAGINATION_MAX')) {
     $db->Execute ("INSERT INTO " . TABLE_CONFIGURATION . " ( configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added, use_function, set_function ) VALUES ( 'Products Pagination Version', 'PRODUCTS_PAGINATION_VERSION', '$pp_current_version', 'This is the current version of the plugin.<br />', $configuration_group_id, 1, now(), NULL, 'trim(')");
   
-    $db->Execute ("INSERT INTO " . TABLE_CONFIGURATION . " ( configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added, use_function, set_function ) VALUES ( 'Enable Products Pagination?', 'PRODUCTS_PAGINATION_ENABLE', 'true', 'Use this setting to enable (default) or disable the pagination display.<br /><br /><b>Default: true</b>', $configuration_group_id, 5, now(), NULL, 'zen_cfg_select_option(array(\'true\', \'false\'),')");
+    $db->Execute ("INSERT INTO " . TABLE_CONFIGURATION . " ( configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added, use_function, set_function ) VALUES ( 'Enable Products Pagination?', 'PRODUCTS_PAGINATION_ENABLE', 'true', 'Use this setting to enable (default) or disable the plugin\'s overall operation.<br /><br /><b>Default: true</b>', $configuration_group_id, 5, now(), NULL, 'zen_cfg_select_option(array(\'true\', \'false\'),')");
+      
+    $db->Execute ("INSERT INTO " . TABLE_CONFIGURATION . " ( configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added, use_function, set_function ) VALUES ( 'Enable Products Pagination (Mobile)?', 'PRODUCTS_PAGINATION_ENABLE_MOBILE', 'false', 'Use this setting to enable or disable (default) the pagination display on <em>mobile</em> devices &mdash; <em>assuming</em> that your template provides support for mobile devices (like the <code>responsive_classic</code> template that is built into Zen Cart 1.5.5a!<br /><br /><b>Default: false</b>', $configuration_group_id, 6, now(), NULL, 'zen_cfg_select_option(array(\'true\', \'false\'),')");
     
     $db->Execute ("INSERT INTO " . TABLE_CONFIGURATION . " ( configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added, use_function, set_function ) VALUES ( 'Products Pagination &mdash; Maximum Links', 'PRODUCTS_PAGINATION_MAX', '10', 'This is the maximum number of product links to be displayed before pagination begins.  This value should be greater than the number of <em>Intermediate Links</em>.<br /><br /><b>Default: 10</b><br />', $configuration_group_id, 10, now(), NULL, NULL)");
   
@@ -52,8 +54,10 @@ if (!defined ('PRODUCTS_PAGINATION_MAX')) {
 //
 } elseif (!defined ('PRODUCTS_PAGINATION_VERSION')) {
     $db->Execute ("INSERT INTO " . TABLE_CONFIGURATION . " ( configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added, use_function, set_function ) VALUES ( 'Products Pagination Version', 'PRODUCTS_PAGINATION_VERSION', '$pp_current_version', 'This is the current version of the plugin.<br />', $configuration_group_id, 1, now(), NULL, 'trim(')");
-  
-    $db->Execute ("INSERT INTO " . TABLE_CONFIGURATION . " ( configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added, use_function, set_function ) VALUES ( 'Enable Products Pagination?', 'PRODUCTS_PAGINATION_ENABLE', 'true', 'Use this setting to enable (default) or disable the pagination display.<br /><br /><b>Default: true</b>', $configuration_group_id, 5, now(), NULL, 'zen_cfg_select_option(array(\'true\', \'false\'),')");
+    
+    $db->Execute ("INSERT INTO " . TABLE_CONFIGURATION . " ( configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added, use_function, set_function ) VALUES ( 'Enable Products Pagination?', 'PRODUCTS_PAGINATION_ENABLE', 'true', 'Use this setting to enable (default) or disable the plugin\'s overall operation.<br /><br /><b>Default: true</b>', $configuration_group_id, 5, now(), NULL, 'zen_cfg_select_option(array(\'true\', \'false\'),')");
+      
+    $db->Execute ("INSERT INTO " . TABLE_CONFIGURATION . " ( configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added, use_function, set_function ) VALUES ( 'Enable Products Pagination (Mobile)?', 'PRODUCTS_PAGINATION_ENABLE_MOBILE', 'false', 'Use this setting to enable or disable (default) the pagination display on <em>mobile</em> devices &mdash; <em>assuming</em> that your template provides support for mobile devices (like the <code>responsive_classic</code> template that is built into Zen Cart 1.5.5a)!<br /><br /><b>Default: false</b>', $configuration_group_id, 6, now(), NULL, 'zen_cfg_select_option(array(\'true\', \'false\'),')");
     
     $keys_resort_array = array (
         'PRODUCTS_PAGINATION_MAX' => 10,

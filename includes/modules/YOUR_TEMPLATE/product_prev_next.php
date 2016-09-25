@@ -16,7 +16,7 @@ if (!defined('IS_ADMIN_FLAG')) {
 // -----
 // If the "Product Pagination" plugin is installed and enabled, load its version of the products' prev/next display.
 //
-if (defined ('PRODUCTS_PAGINATION_ENABLE') && PRODUCTS_PAGINATION_ENABLE == 'true') {
+if ($ppObserver->isPaginationEnabled ('product')) {
     require (DIR_WS_MODULES . zen_get_module_directory ('pp_product_prev_next'));
 // bof: previous next
 } elseif (PRODUCT_INFO_PREVIOUS_NEXT != 0) {

@@ -15,6 +15,17 @@ class products_pagination_observer extends base
         $this->product_names_array = array ();
         
         $this->attach ($this, array ( /* From /includes/init_includes/init_canonical.php */ 'NOTIFY_INIT_CANONICAL_PARAM_WHITELIST' ));
+        
+        if (!class_exists ('Mobile_Detect')) {
+            include_once (DIR_WS_CLASSES . 'Mobile_Detect.php');
+        }
+        $detect = new Mobile_Detect ();
+        $this->isTablet = $detect->isTablet () || (isset ($_SESSION['layoutType']) && $_SESSION['layoutType'] == 'tablet');
+        $this->isMobile = (!$detect->isTablet () && $detect->isMobile ()) || (isset ($_SESSION['layoutType']) && $_SESSION['layoutType'] == 'mobile');
+        $this->isDesktop = !($this->isTablet || $this->isMobile);
+        
+        $this->isEnabled = (defined ('PRODUCTS_PAGINATION_ENABLE') && PRODUCTS_PAGINATION_ENABLE == 'true');
+        $this->isEnabledMobile = $this->isEnabled && (defined ('PRODUCTS_PAGINATION_ENABLE_MOBILE') && PRODUCTS_PAGINATION_ENABLE_MOBILE == 'true');
     }
   
     public function update (&$class, $eventID, $p1, &$p2, &$p3, &$p4, &$p5) 
@@ -30,6 +41,21 @@ class products_pagination_observer extends base
             default:
                 break;
         }   
+    }
+    
+    // -----
+    // This function returns a boolean value indicating whether or not the plugin is to be used on the current page.
+    //
+    public function isPaginationEnabled ($whichType)
+    {
+        $enabled = ($this->isEnabled && $this->isDesktop) || ($this->isEnabledMobile && !$this->isDesktop);
+        if ($enabled && $whichType == 'other' &&
+            !( PRODUCTS_PAGINATION_OTHER == 'true' && PRODUCTS_PAGINATION_OTHER_MAIN_PAGES != '' && isset ($_GET['main_page']) &&
+               in_array ($_GET['main_page'], explode (',', PRODUCTS_PAGINATION_OTHER_MAIN_PAGES)) ) ) {
+            $enabled = false;
+        }
+        $this->pagePaginationEnabled = $enabled;
+        return $enabled;
     }
     
     // -----
@@ -99,17 +125,13 @@ class products_pagination_observer extends base
                         $this->position = $this->counter;
                         if ($key == 0) {
                             $this->previous_position = -1;
-                            $previous = -1;
                         } else {
                             $this->previous_position = $key - 1;
-                            $previous = $id_array[$this->previous_position];
                         }
-                        if (isset($id_array[$key + 1]) && $id_array[$key + 1]) {
+                        if (isset ($this->id_array[$key + 1]) && $this->id_array[$key + 1]) {
                             $this->next_position = $key + 1;
-                            $next_item = $id_array[$key + 1];
                         } else {
                             $this->next_position = 0;
-                            $next_item = $id_array[0];
                         }
                     }
                     $last = $value;
