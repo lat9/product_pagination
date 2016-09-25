@@ -72,11 +72,12 @@ th { background-color: #eee; }
 </head>
 
 <body>
-  <h1>Products' Paginition <span class="smaller">for Zen Cart v1.5.4 (and later)</span></h1>
+  <h1>Products' Pagination <span class="smaller">for Zen Cart v1.5.5 (and later)</span></h1>
   <h3>Version 2.0.0 by lat9</h3>
   <h3>Copyright &copy; 2010-2016 <a href="http://vinosdefrutastropicales.com" target="_blank">Vinos de Frutas Tropicales</a>. All rights reserved.</h3>
   <hr />
   <p>Current Support Thread at Zen Cart Forums: <a href="http://www.zen-cart.com/forum/showthread.php?t=169227" target="_blank">http://www.zen-cart.com/forum/showthread.php?t=169227</a></p>
+  <p><strong>Note:</strong> If you are using a Zen Cart version <em>prior to</em> 1.5.5, please use a previous 1.x.x version of <em>Products' Pagination</em>.</p>
   
   <div class="tab-container" id="outer-container">
     <ul class="etabs">
@@ -109,15 +110,17 @@ th { background-color: #eee; }
           <li>reviews</li>
           <li>specials</li>
         </ul>
-        <p>The updated display looks similar to <a target="_blank" href="http://vinosdefrutastropicales.com/index.php?main_page=product_info&cPath=2_6&products_id=3">this</a>.  Links to the first and last products in the category (or page groups for the &quot;other&quot; pages) are always displayed, and you control the maximum number of links to be shown.  When you hover over a link on a product-information page, the name of the product associated with that link is displayed by the browser.</p>
+        <p>The updated display looks similar to <a target="_blank" href="http://vinosdefrutastropicales.com/demo/index.php?main_page=product_info&cPath=66&products_id=34">this</a>.  Links to the first and last products in the category (or page groups for the &quot;other&quot; pages) are always displayed, and you control the maximum number of links to be shown.  When you hover over a link on a product-information page, the name of the product associated with that link is displayed by the browser.</p>
         <p>There are optional (default: <em>false</em>) controls in your admin's <em>Configuration-&gt;Products Pagination</em> that enable you to display a page-select drop-down where your visitors can choose which page of the display to go to next and/or an item-count drop-down where your visitors can choose how many items to view per display page.  These controls appear <em>only</em> on the &quot;Other pages to link&quot;.</p>
+        <p>Starting with v2.0.0, you also control whether the plugin's pagination links are active when your site is viewed by a <em>mobile</em> device.  To enable that handling, the plugin makes use of the <b><i>presumed pre-existing</i></b> file <code class="no-pad">/includes/classes/Mobile_Detect.php</code> and is also aware of the <code class="no-pad">layoutType</code> handling provided by Zen Cart 1.5.5's <em>responsive_classic</em> template.</p>
       </div>
     
       <div id="configure">
         <p>After you have copied the plugin's files to your store's file-system and logged into your admin-console, you will see a <em>Configuration-&gt;Products Pagination</em> selection.  Within that selection, the following settings are available for you to customize the plugin's display:</p>
         <ol>
-          <li><b>Products Pagination Version</b>.  Displays the plugin's current version and release date.</li>
-          <li><b>Enable Products Pagination?</b>.  Use this setting to enable (default) or disable the pagination display.</li>
+          <li><b>Products Pagination Version</b>.  Displays the plugin's current version and release date. <span class="smaller">(Added in v2.0.0)</span></li>
+          <li><b>Enable Products Pagination?</b>.  Use this setting to enable (default) or disable the plugin's overall operation. <span class="smaller">(Added in v2.0.0)</span></li>
+          <li><b>Enable Products Pagination (Mobile)?</b>. Use this setting to enable or disable (default) the plugin's operation when viewed by a mobile/tablet device.  When <em>disabled</em>, the pagination defaults to your template's &quot;normal&quot; formatting. <span class="smaller">(Added in v2.0.0)</span></li>
           <li><b>Products Pagination &mdash; Maximum Links</b>.  This value (default: 10) specifies the number of product links that are displayed without pagination; e.g. for the default value, if a category contains 10 or fewer products you'll get a next/previous display that contains selections for products 1 through 10 along with the <em>Previous</em> and <em>Next</em> links.</li>
           <li><b>Products Pagination &mdash; Intermediate Links</b>.  This value (default: 7) specifies the number of product links to show once pagination has &quot;kicked in&quot;, i.e. if the number of products in the current category is greater than <em>Maximum Links</em>.  For the default values, if the current category contains more than 10 products, you'll get a next/previous display that always contains the links for the first and last products and the <em>Previous</em> and <em>Next</em> links, as well as up to 7 product-specific links.  An ellipsis (&hellip;) is displayed when there is a break in the product sequence.</li>
           <li><b>Enable product listing link?</b>.  This value (default: true) specifies whether (true) or not (false) to include a &quot;View product listing&quot; link on the same line as &quot;Viewing product x of y&quot;.</li>
@@ -222,8 +225,8 @@ th { background-color: #eee; }
             
             <div id="changes">
               <ul>
-                <li>v2.0.0, 2016-08-08:<ul>
-                  <li>Initial release as v2.0.0, for Zen Cart 1.5.4 and later, based on the like-named plugin's v1.5.0 file-set.</li>
+                <li>v2.0.0, 2016-09-24:<ul>
+                  <li>Initial release as v2.0.0, for Zen Cart 1.5.5 and later, based on the like-named plugin's v1.5.0 file-set.</li>
                 </ul></li>
               </ul>
             </div>
