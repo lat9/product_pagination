@@ -183,7 +183,7 @@ class products_pagination_observer extends base
 
             if ($products_found_count <= PRODUCTS_PAGINATION_MAX) {
                 for ($i=0; $i < $products_found_count; $i++) {
-                    $return_html .= $this->createNextPrevLink ($i, $i+1, true, ($i === $this->position ? ' class="currentpage"' : '') . $this->page_link_parms) . PHP_EOL;
+                    $return_html .= $this->createNextPrevLink ($i, $i+1, true, ($i === $this->position ? ' class="currentpage"' : '')) . PHP_EOL;
                 }
             } else {
                 $first_product_link = $this->position - floor (PRODUCTS_PAGINATION_MID_RANGE/2);
