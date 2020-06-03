@@ -20,12 +20,12 @@ class products_pagination_observer extends base
             include_once (DIR_WS_CLASSES . 'Mobile_Detect.php');
         }
         $detect = new Mobile_Detect ();
-        $this->isTablet = $detect->isTablet () || (isset ($_SESSION['layoutType']) && $_SESSION['layoutType'] == 'tablet');
-        $this->isMobile = (!$detect->isTablet () && $detect->isMobile ()) || (isset ($_SESSION['layoutType']) && $_SESSION['layoutType'] == 'mobile');
+        $this->isTablet = $detect->isTablet () || (isset ($_SESSION['layoutType']) && $_SESSION['layoutType'] === 'tablet');
+        $this->isMobile = (!$detect->isTablet () && $detect->isMobile ()) || (isset ($_SESSION['layoutType']) && $_SESSION['layoutType'] === 'mobile');
         $this->isDesktop = !($this->isTablet || $this->isMobile);
         
-        $this->isEnabled = (defined ('PRODUCTS_PAGINATION_ENABLE') && PRODUCTS_PAGINATION_ENABLE == 'true');
-        $this->isEnabledMobile = $this->isEnabled && (defined ('PRODUCTS_PAGINATION_ENABLE_MOBILE') && PRODUCTS_PAGINATION_ENABLE_MOBILE == 'true');
+        $this->isEnabled = (defined ('PRODUCTS_PAGINATION_ENABLE') && PRODUCTS_PAGINATION_ENABLE === 'true');
+        $this->isEnabledMobile = $this->isEnabled && (defined ('PRODUCTS_PAGINATION_ENABLE_MOBILE') && PRODUCTS_PAGINATION_ENABLE_MOBILE === 'true');
     }
   
     public function update (&$class, $eventID, $p1, &$p2, &$p3, &$p4, &$p5) 
@@ -49,8 +49,8 @@ class products_pagination_observer extends base
     public function isPaginationEnabled ($whichType)
     {
         $enabled = ($this->isEnabled && $this->isDesktop) || ($this->isEnabledMobile && !$this->isDesktop);
-        if ($enabled && $whichType == 'other' &&
-            !( PRODUCTS_PAGINATION_OTHER == 'true' && PRODUCTS_PAGINATION_OTHER_MAIN_PAGES != '' && isset ($_GET['main_page']) &&
+        if ($enabled && $whichType === 'other' &&
+            !( PRODUCTS_PAGINATION_OTHER === 'true' && PRODUCTS_PAGINATION_OTHER_MAIN_PAGES != '' && isset ($_GET['main_page']) &&
                in_array ($_GET['main_page'], explode (',', PRODUCTS_PAGINATION_OTHER_MAIN_PAGES)) ) ) {
             $enabled = false;
         }
@@ -118,12 +118,12 @@ class products_pagination_observer extends base
                 $products_ids->MoveNext();
             }
 
-            if (count ($this->id_array) != 0) {
+            if (count($this->id_array) !== 0) {
                 $this->counter = 0;
                 foreach ($this->id_array as $key => $value) {
-                    if ($value == (int)$_GET['products_id']) {
+                    if ((int)$value === (int)$_GET['products_id']) {
                         $this->position = $this->counter;
-                        if ($key == 0) {
+                        if ($key === 0) {
                             $this->previous_position = -1;
                         } else {
                             $this->previous_position = $key - 1;
@@ -160,13 +160,13 @@ class products_pagination_observer extends base
         if ($products_found_count > 1) {
             $products_last_index = $products_found_count - 1;
 
-            $display_prev_link  = ($this->position == 0) ? false : true;
-            $display_next_link  = ($this->position == $products_last_index) ? false : true;
+            $display_prev_link  = $this->position !== 0;
+            $display_next_link  = $this->position !== $products_last_index;
             
             $return_html  = '<div class="ppNextPrevCounter">' . PHP_EOL;
-            $return_html .= '  <p' . ((PRODUCTS_PAGINATION_LISTING_LINK == 'true') ? ' class="back pagination-list"' : '') . '>' . PP_PREV_NEXT_PRODUCT . ($this->position+1) . PP_PREV_NEXT_PRODUCT_SEP . $this->counter . '</p>' . PHP_EOL;
+            $return_html .= '  <p' . ((PRODUCTS_PAGINATION_LISTING_LINK === 'true') ? ' class="back pagination-list"' : '') . '>' . PP_PREV_NEXT_PRODUCT . ($this->position+1) . PP_PREV_NEXT_PRODUCT_SEP . $this->counter . '</p>' . PHP_EOL;
 
-            if (PRODUCTS_PAGINATION_LISTING_LINK == 'true') {
+            if (PRODUCTS_PAGINATION_LISTING_LINK === 'true') {
                 $return_html .= '  <div class="prod-pagination prevnextReturn">' . PHP_EOL;
                 $return_html .= '    <ul>' . PHP_EOL;
                 $return_html .= '      <li><a href="' . zen_href_link (FILENAME_DEFAULT, 'cPath=' . $this->cPath) . '" class="prevnext" title="' . sprintf (PP_TEXT_PRODUCT_LISTING_TITLE, $this->category_name) . '">' . PP_TEXT_PRODUCT_LISTING . '</a></li>' . PHP_EOL;
@@ -186,8 +186,8 @@ class products_pagination_observer extends base
                     $return_html .= $this->createNextPrevLink ($i, $i+1, true, ($i === $this->position ? ' class="currentpage"' : '')) . PHP_EOL;
                 }
             } else {
-                $first_product_link = $this->position - floor (PRODUCTS_PAGINATION_MID_RANGE/2);
-                $last_product_link  = $this->position + floor (PRODUCTS_PAGINATION_MID_RANGE/2);
+                $first_product_link = $this->position - floor(PRODUCTS_PAGINATION_MID_RANGE/2);
+                $last_product_link  = $this->position + floor(PRODUCTS_PAGINATION_MID_RANGE/2);
 
                 if ($first_product_link < 0) {
                     $last_product_link += abs ($first_product_link);
@@ -197,7 +197,7 @@ class products_pagination_observer extends base
                     $first_product_link -= $last_product_link - $products_last_index;
                     $last_product_link   = $products_last_index;
                 }
-                $display_range = range ($first_product_link, $last_product_link);
+                $display_range = range($first_product_link, $last_product_link);
 
                 for ($i=0; $i < $products_found_count; $i++) {
                     if ($display_range[0] > 1 && $i == $display_range[0]) {
