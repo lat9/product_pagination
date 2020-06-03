@@ -11,10 +11,10 @@ class products_pagination_observer extends base
 {
     public function __construct() 
     {
-        $this->id_array = array ();
-        $this->product_names_array = array ();
+        $this->id_array = [];
+        $this->product_names_array = [];
         
-        $this->attach ($this, array ( /* From /includes/init_includes/init_canonical.php */ 'NOTIFY_INIT_CANONICAL_PARAM_WHITELIST' ));
+        $this->attach ($this, [ /* From /includes/init_includes/init_canonical.php */ 'NOTIFY_INIT_CANONICAL_PARAM_WHITELIST']);
         
         if (!class_exists ('Mobile_Detect')) {
             include_once (DIR_WS_CLASSES . 'Mobile_Detect.php');
