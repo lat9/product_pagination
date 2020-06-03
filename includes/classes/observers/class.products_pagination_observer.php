@@ -224,7 +224,7 @@ class products_pagination_observer extends base
     private function createNextPrevLink ($offset, $name, $display_flag=true, $extra_class='')
     {
         if ($display_flag) {
-            $return_html = '<li><a href="' . zen_href_link(zen_get_info_page($this->id_array[$offset]), $this->page_link_parms . $this->id_array[$offset], 'NONSSL', false) . '"' . $extra_class . ' title="' . htmlentities (zen_clean_html ($this->product_names_array[$offset]), ENT_COMPAT, CHARSET) . '">' . $name . '</a></li>';
+            $return_html = '<li><a href="' . zen_href_link(zen_get_info_page($this->id_array[$offset]), $this->page_link_parms . $this->id_array[$offset], 'NONSSL', false) . '"' . $extra_class . ' title="' . htmlentities(zen_clean_html($this->product_names_array[$offset]), ENT_COMPAT, CHARSET) . '">' . $name . '</a></li>';
         } else {
             $return_html = '<li><span class="prevnext disablelink">' . $name . '</span></li>';
         }
