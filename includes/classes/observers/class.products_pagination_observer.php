@@ -27,8 +27,8 @@ class products_pagination_observer extends base
         $this->isEnabled = (defined ('PRODUCTS_PAGINATION_ENABLE') && PRODUCTS_PAGINATION_ENABLE === 'true');
         $this->isEnabledMobile = $this->isEnabled && (defined ('PRODUCTS_PAGINATION_ENABLE_MOBILE') && PRODUCTS_PAGINATION_ENABLE_MOBILE === 'true');
     }
-  
-    public function update (&$class, $eventID, $p1, &$p2, &$p3, &$p4, &$p5) 
+
+    public function update (&$class, $eventID, $p1, &$p2, &$p3, &$p4, &$p5)
     {
         switch ($eventID) {
             // -----
@@ -65,8 +65,8 @@ class products_pagination_observer extends base
     public function initializeNextPrev ()
     {
         global $db, $cPath, $cPath_array, $current_category_id;
-        if (PRODUCT_INFO_PREVIOUS_NEXT != 0) {
-            switch (PRODUCT_INFO_PREVIOUS_NEXT_SORT) {
+        if (PRODUCT_INFO_PREVIOUS_NEXT !== '0') {
+            switch ((int)PRODUCT_INFO_PREVIOUS_NEXT_SORT) {
                 case (0):
                     $prev_next_order= ' order by LPAD(p.products_id,11,"0")';
                     break;
@@ -156,7 +156,7 @@ class products_pagination_observer extends base
     public function formatNextPrev()
     {
         $return_html = '';
-        $products_found_count = count ($this->id_array);
+        $products_found_count = count($this->id_array);
         if ($products_found_count > 1) {
             $products_last_index = $products_found_count - 1;
 
@@ -181,33 +181,33 @@ class products_pagination_observer extends base
 
             $return_html .= '    ' . $this->createNextPrevLink ($this->previous_position, PP_TEXT_PREVIOUS, $display_prev_link, ' class="prevnext"') . PHP_EOL;
 
-            if ($products_found_count <= PRODUCTS_PAGINATION_MAX) {
+            if ($products_found_count <= (int)PRODUCTS_PAGINATION_MAX) {
                 for ($i=0; $i < $products_found_count; $i++) {
                     $return_html .= $this->createNextPrevLink ($i, $i+1, true, ($i === $this->position ? ' class="currentpage"' : '')) . PHP_EOL;
                 }
             } else {
-                $first_product_link = $this->position - floor(PRODUCTS_PAGINATION_MID_RANGE/2);
-                $last_product_link  = $this->position + floor(PRODUCTS_PAGINATION_MID_RANGE/2);
+                $first_product_link = $this->position - floor((int)PRODUCTS_PAGINATION_MID_RANGE/2);
+                $last_product_link  = $this->position + floor((int)PRODUCTS_PAGINATION_MID_RANGE/2);
 
                 if ($first_product_link < 0) {
-                    $last_product_link += abs ($first_product_link);
+                    $last_product_link += abs($first_product_link);
                     $first_product_link = 0;
                 }
                 if ($last_product_link > $products_last_index) {
                     $first_product_link -= $last_product_link - $products_last_index;
                     $last_product_link   = $products_last_index;
                 }
-                $display_range = range($first_product_link, $last_product_link);
+                $display_range = range($first_product_link, $last_product_link); //note: array values are doubles!
 
                 for ($i=0; $i < $products_found_count; $i++) {
                     if ($display_range[0] > 1 && $i == $display_range[0]) {
                         $return_html .= '    <li class="hellip"> ... </li>' . PHP_EOL;
                     }
                     // loop through all pages. if first, last, or in range, display
-                    if ($i == 0 || $i == $products_last_index || in_array ($i, $display_range)) {
-                        $return_html .= '    ' . $this->createNextPrevLink ($i, $i+1, true, ($i == $this->position) ? ' class="currentpage"' : '') . PHP_EOL;
+                    if ($i === 0 || $i === $products_last_index || in_array ($i, $display_range)) {
+                        $return_html .= '    ' . $this->createNextPrevLink ($i, $i+1, true, ($i === $this->position) ? ' class="currentpage"' : '') . PHP_EOL;
                     }
-                    if ($display_range[PRODUCTS_PAGINATION_MID_RANGE-1] < $products_last_index-1 && $i == $display_range[PRODUCTS_PAGINATION_MID_RANGE-1]) {
+                    if ((int)$display_range[PRODUCTS_PAGINATION_MID_RANGE-1] < $products_last_index-1 && $i === (int)$display_range[PRODUCTS_PAGINATION_MID_RANGE-1]) {
                         $return_html .= '    <li class="hellip"> ... </li>' . PHP_EOL;
                     }
                 }
