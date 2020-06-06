@@ -27,7 +27,7 @@ class splitPageResults extends base
         
         $this->input_page_suffix = 1;
         $this->input_pagecount_suffix = 1;
-        $this->hidden_input_added = false;
+        $this->hidden_var_added = false;
         
         // -----
         // If the plugin has been configured to provide an items-per-page dropdown ...
