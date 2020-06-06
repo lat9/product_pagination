@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <link rel="icon" href="../vinos_favicon.ico" type="image/x-icon" />
 <link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
@@ -62,9 +62,9 @@ th { background-color: #eee; }
 -->
 </style>
 <link rel="stylesheet" type="text/css" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" />
-<script src="../jquery-1.7.1.min.js" type="text/javascript"></script> 
-<script src="../jquery.easytabs.min.js" type="text/javascript"></script>
-<script type="text/javascript">
+<script src="../jquery-1.7.1.min.js"></script> 
+<script src="../jquery.easytabs.min.js"></script>
+<script>
   $(document).ready( function() {
       $('#tab-container').easytabs();
   });
@@ -73,10 +73,10 @@ th { background-color: #eee; }
 
 <body>
   <h1>Products' Pagination <span class="smaller">for Zen Cart v1.5.5 (and later)</span></h1>
-  <h3>Version 2.0.0 by lat9</h3>
-  <h3>Copyright &copy; 2010-2016 <a href="http://vinosdefrutastropicales.com" target="_blank">Vinos de Frutas Tropicales</a>. All rights reserved.</h3>
+  <h3>Version 2.1.0 by lat9 and torvista</h3>
+  <h3>Copyright &copy; 2010-2020 <a href="https://vinosdefrutastropicales.com" target="_blank">Vinos de Frutas Tropicales</a>. All rights reserved.</h3>
   <hr />
-  <p>Current Support Thread at Zen Cart Forums: <a href="http://www.zen-cart.com/forum/showthread.php?t=169227" target="_blank">http://www.zen-cart.com/forum/showthread.php?t=169227</a></p>
+  <p>Current Support Thread at Zen Cart Forums: <a href="https://www.zen-cart.com/forum/showthread.php?t=169227" target="_blank">http://www.zen-cart.com/forum/showthread.php?t=169227</a></p>
   <p><strong>Note:</strong> If you are using a Zen Cart version <em>prior to</em> 1.5.5, please use a previous 1.x.x version of <em>Products' Pagination</em>.</p>
   
   <div class="tab-container" id="outer-container">
@@ -225,6 +225,14 @@ th { background-color: #eee; }
             
             <div id="changes">
               <ul>
+                <li>v2.1.0, 2020-06-06 (torvista and lat9):<ul>
+                    <li>BUGFIX: Correct various PHP notices and processing errors in the plugin's observer-class.</li>
+                    <li>BUGFIX: Use correct variable name in the plugin's split-page class.</li>
+                    <li>The following files were changed:<ol>
+                        <li>/includes/classes/pp_split_page_results.php</li>
+                        <li>/includes/classes/observers/class.products_pagination_observer.php</li>
+                    </ol></li>
+                </ul></li>
                 <li>v2.0.0, 2016-09-25:<ul>
                   <li>Initial release as v2.0.0, for Zen Cart 1.5.5 and later, based on the like-named plugin's v1.5.0 file-set.</li>
                 </ul></li>
