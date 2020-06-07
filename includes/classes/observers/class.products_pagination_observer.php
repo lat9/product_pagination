@@ -126,6 +126,7 @@ class products_pagination_observer extends base
 
             if (count($this->id_array) !== 0) {
                 $this->counter = 0;
+                $this->position = 0;
                 foreach ($this->id_array as $key => $value) {
                     if ((int)$value === (int)$_GET['products_id']) {
                         $this->position = $this->counter;
@@ -169,6 +170,14 @@ class products_pagination_observer extends base
     public function getProductsCount()
     {
         return $this->counter;
+    }
+    
+    // -----
+    // Return the current 'position' within the products' list.
+    //
+    public function currentPosition()
+    {
+        return $this->position;
     }
     
     // -----
