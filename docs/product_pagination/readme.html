@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <link rel="icon" href="../vinos_favicon.ico" type="image/x-icon" />
-<link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
 <title>Products' Pagination</title>
 
 <style type="text/css">
@@ -61,7 +61,7 @@ th { background-color: #eee; }
 }
 -->
 </style>
-<link rel="stylesheet" type="text/css" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" />
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" />
 <script src="../jquery-1.7.1.min.js"></script> 
 <script src="../jquery.easytabs.min.js"></script>
 <script>
@@ -76,7 +76,7 @@ th { background-color: #eee; }
   <h3>Version 2.1.0 by lat9 and torvista</h3>
   <h3>Copyright &copy; 2010-2020 <a href="https://vinosdefrutastropicales.com" target="_blank">Vinos de Frutas Tropicales</a>. All rights reserved.</h3>
   <hr />
-  <p>Current Support Thread at Zen Cart Forums: <a href="https://www.zen-cart.com/forum/showthread.php?t=169227" target="_blank">http://www.zen-cart.com/forum/showthread.php?t=169227</a></p>
+  <p>Current Support Thread at Zen Cart Forums: <a href="https://www.zen-cart.com/forum/showthread.php?t=169227" target="_blank">https://www.zen-cart.com/forum/showthread.php?t=169227</a></p>
   <p><strong>Note:</strong> If you are using a Zen Cart version <em>prior to</em> 1.5.5, please use a previous 1.x.x version of <em>Products' Pagination</em>.</p>
   
   <div class="tab-container" id="outer-container">
@@ -110,7 +110,7 @@ th { background-color: #eee; }
           <li>reviews</li>
           <li>specials</li>
         </ul>
-        <p>The updated display looks similar to <a target="_blank" href="http://vinosdefrutastropicales.com/demo/index.php?main_page=product_info&cPath=66&products_id=34">this</a>.  Links to the first and last products in the category (or page groups for the &quot;other&quot; pages) are always displayed, and you control the maximum number of links to be shown.  When you hover over a link on a product-information page, the name of the product associated with that link is displayed by the browser.</p>
+        <p>The updated display looks similar to <a target="_blank" href="https://vinosdefrutastropicales.com/demo/index.php?main_page=product_info&cPath=66&products_id=34">this</a>.  Links to the first and last products in the category (or page groups for the &quot;other&quot; pages) are always displayed, and you control the maximum number of links to be shown.  When you hover over a link on a product-information page, the name of the product associated with that link is displayed by the browser.</p>
         <p>There are optional (default: <em>false</em>) controls in your admin's <em>Configuration-&gt;Products Pagination</em> that enable you to display a page-select drop-down where your visitors can choose which page of the display to go to next and/or an item-count drop-down where your visitors can choose how many items to view per display page.  These controls appear <em>only</em> on the &quot;Other pages to link&quot;.</p>
         <p>Starting with v2.0.0, you also control whether the plugin's pagination links are active when your site is viewed by a <em>mobile</em> device.  To enable that handling, the plugin makes use of the <b><i>presumed pre-existing</i></b> file <code class="no-pad">/includes/classes/Mobile_Detect.php</code> and is also aware of the <code class="no-pad">layoutType</code> handling provided by Zen Cart 1.5.5's <em>responsive_classic</em> template.</p>
       </div>
@@ -153,7 +153,7 @@ th { background-color: #eee; }
                 <li>Copy the plugin's files to your store's file-system:<ol>
                   <li>/includes/auto_loaders/config.pagination.php</li>
                   <li>/includes/classes/pp_split_page_results.php</li>
-                  <li><span class="corefile">/includes/classes/split_page_results.php</span></li>
+                  <li><span class="corefile">/includes/classes/split_page_results.php</span> <span class="smaller">(This is the zc157 version of the file, with 2 marked change-sections).</span></li>
                   <li>/includes/classes/observers/class.products_pagination_observer.php</li>
                   <li>/includes/extra_cart_actions/pagination_actions.php</li>
                   <li>/includes/functions/extra_functions/products_pagination_functions.php</li>
@@ -201,7 +201,7 @@ th { background-color: #eee; }
               <ol>
                 <li>/includes/auto_loaders/config.pagination.php <span class="smaller">(Added in v2.0.0)</span></li>
                 <li>/includes/classes/pp_split_page_results.php <span class="smaller">(Added in v2.0.0)</span></li>
-                <li><span class="corefile">/includes/classes/split_page_results.php</span></li>
+                <li><span class="corefile">/includes/classes/split_page_results.php</span> <span class="smaller">(This is the zc157 version of the file, with 2 marked change-sections).</span></li>
                 <li>/includes/classes/observers/class.products_pagination_observer.php</li>
                 <li>/includes/extra_cart_actions/pagination_actions.php</li>
                 <li>/includes/functions/extra_functions/products_pagination_functions.php</li>
@@ -228,9 +228,19 @@ th { background-color: #eee; }
                 <li>v2.1.0, 2020-06-06 (torvista and lat9):<ul>
                     <li>BUGFIX: Correct various PHP notices and processing errors in the plugin's observer-class.</li>
                     <li>BUGFIX: Use correct variable name in the plugin's split-page class.</li>
+                    <li>BUGFIX: Move pagination HTML out of class-file to template.</li>
+                    <li>BUGFIX: (Future proofing) Use zc157 files as the core/template change-basis; add check so that the plugin can be removed without additional changes.</li>
                     <li>The following files were changed:<ol>
                         <li>/includes/classes/pp_split_page_results.php</li>
+                        <li><span class="corefile">/includes/classes/split_page_results.php</span> <span class="smaller">(Now using the zc157 version as the change-basis)</span></li>
                         <li>/includes/classes/observers/class.products_pagination_observer.php</li>
+                        <li>/includes/languages/english/extra_definitions/products_pagination.php</li>
+                        <li><span class="template">/includes/modules/YOUR_TEMPLATE/prod_prev_next.php</span></li>
+                        <li>/includes/templates/template_default/templates/tpl_pp_products_next_previous.php</li>
+                        <li><span class="template">/includes/templates/YOUR_TEMPLATE/css/stylesheet_prod_pagination.css</span></li>
+                        <li><span class="template">/includes/templates/YOUR_TEMPLATE/templates/tpl_index_product_list.php</span></li>
+                        <li><span class="template">/includes/templates/YOUR_TEMPLATE/templates/tpl_modules_listing_display_order.php</span></li>
+                        <li><span class="template">/includes/templates/YOUR_TEMPLATE/templates/tpl_products_next_previous.php</span></li>
                     </ol></li>
                 </ul></li>
                 <li>v2.0.0, 2016-09-25:<ul>
@@ -311,7 +321,7 @@ th { background-color: #eee; }
                 <li>v1.2.2, 2012-05-16, Corrected HTML validation errors (/includes/classes/split_page_results.php, /includes/functions/extra_functions/products_pagination_functions.php and /includes/templates/YOUR_TEMPLATE/templates/tpl_products_next_previous.php).</li>
                 <li>v1.2.1, 2012-03-20, Corrected install SQL scripts to remove unwanted back-quotes around column and table names.</li>
                 <li>v1.2.0, 2012-03-01, Added support for all pages currently used by the split pages' results.  Consolidated the CSS into a single file.</li>
-                <li>v1.1.1, 2011-08-15, Updated 1.5.0+ install SQL to correct the problem described <a href="http://www.zen-cart.com/forum/showpost.php?p=993178&amp;postcount=9">here</a>.</li>
+                <li>v1.1.1, 2011-08-15, Updated 1.5.0+ install SQL to correct the problem described <a href="https://www.zen-cart.com/forum/showpost.php?p=993178&amp;postcount=9">here</a>.</li>
                 <li>v1.1.0, 2011-08-08, Updated install to support Zen Cart 1.5.0+ admin_pages.</li>
                 <li>v1.0.1, 2011-04-14, Added the product listing link feature; requires re-running the installation SQL if you want the link.</li>
                 <li>v1.0.0, 2010-11-30, Initial release.</li>
