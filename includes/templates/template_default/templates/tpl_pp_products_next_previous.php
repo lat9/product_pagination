@@ -98,7 +98,6 @@ if ($products_found_count > 1) {
         }
     } 
 
-<?php
     if ($current_position !== $products_last_index) {
         $next_info = $ppObserver->getNextProductInfo();
         $ppID = $next_info['id'];
@@ -109,8 +108,7 @@ if ($products_found_count > 1) {
     } else {
 ?>
         <li><span class="prevnext disablelink"><?php echo PP_TEXT_NEXT; ?></span></li>
-<?php
-    }
+<?php } ?>
         </ul>
     </div>
     <div class="clearBoth"></div>
