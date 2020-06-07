@@ -19,11 +19,13 @@
   echo zen_draw_form('sorter_form', zen_href_link($_GET['main_page']), 'get');
   
 //-bof-product_pagination-lat9  *** 1 of 1 ***
-if (isset ($_GET['pagecount'])) {
-    echo zen_draw_hidden_field ('pagecount', $_GET['pagecount']);
+if (isset($_GET['pagecount'])) {
+    echo zen_draw_hidden_field('pagecount', $_GET['pagecount']);
 }
 //-eof-product_pagination-lat9  *** 1 of 1 ***
 
+  echo zen_draw_hidden_field('main_page', $_GET['main_page']);
+//  echo zen_draw_hidden_field('disp_order', $_GET['disp_order']);
   echo zen_hide_session_id();
 ?>
     <select name="disp_order" onchange="this.form.submit();" id="disp-order-sorter">
