@@ -110,7 +110,7 @@ if ($products_found_count > 1) {
         <li><span class="prevnext disablelink"><?php echo PP_TEXT_NEXT; ?></span></li>
 <?php } ?>
         </ul>
-    </div>
+    </nav>
     <div class="clearBoth"></div>
 </div>
 <?php
