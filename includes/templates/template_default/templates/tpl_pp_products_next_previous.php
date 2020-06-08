@@ -33,8 +33,8 @@ if ($products_found_count > 1) {
         <div class="clearBoth"></div>
     </div>
 
-    <nav class="pagination">
-        <ul>
+    <nav class="prod-pagination">
+        <ul class="pp_float pagination-links">
 <?php
     if ($current_position !== 0) {
         $previous_info = $ppObserver->getPreviousProductInfo();

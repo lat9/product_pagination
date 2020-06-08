@@ -212,7 +212,13 @@ class splitPageResults extends base
                 }
             }
     
-            $display_links_string .= $this->formatPageLink( PREVNEXT_TITLE_NEXT_PAGE, PP_TEXT_NEXT, $parameters . $this->page_name . '=' . ($this->current_page_number + 1), ($this->current_page_number == $this->number_of_pages) ? false : true, ' class="prevnext"');
+            $display_links_string .= $this->formatPageLink(
+                PREVNEXT_TITLE_NEXT_PAGE, 
+                PP_TEXT_NEXT, 
+                $parameters . $this->page_name . '=' . ($this->current_page_number + 1), 
+                $this->current_page_number != $this->number_of_pages, 
+                ' class="prevnext"'
+            );
             
             $display_links_string .= '</ul><div class="clearBoth"></div>';
         }
