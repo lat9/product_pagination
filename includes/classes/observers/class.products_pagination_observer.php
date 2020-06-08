@@ -211,7 +211,7 @@ class products_pagination_observer extends base
     //
     public function getPreviousProductInfo()
     {
-        return $this->getProductInfo($this->previous_product);
+        return $this->getProductInfo($this->previous_position);
     }
     public function getProductInfo($offset)
     {
@@ -222,6 +222,6 @@ class products_pagination_observer extends base
     }
     public function getNextProductInfo()
     {
-        return $this->getProductInfo($this->next_product);
+        return $this->getProductInfo($this->next_position);
     }
 }
