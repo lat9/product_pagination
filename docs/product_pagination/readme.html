@@ -225,12 +225,14 @@ th { background-color: #eee; }
             
             <div id="changes">
               <ul>
-                <li>v2.1.0, 2020-06-06 (torvista and lat9):<ul>
+                <li>v2.1.0, 2020-06-13 (torvista and lat9):<ul>
                     <li>BUGFIX: Correct various PHP notices and processing errors in the plugin's observer-class.</li>
                     <li>BUGFIX: Use correct variable name in the plugin's split-page class.</li>
                     <li>BUGFIX: Move pagination HTML out of class-file to template.</li>
                     <li>BUGFIX: (Future proofing) Use zc157 files as the core/template change-basis; add check so that the plugin can be removed without additional changes.</li>
+                    <li>CHANGE: zc157 interoperability, force the 'split_page_results.php' class to load that second time.</li>
                     <li>The following files were changed:<ol>
+                        <li>/includes/auto_loaders/config.pagination.php</li>
                         <li>/includes/classes/pp_split_page_results.php</li>
                         <li><span class="corefile">/includes/classes/split_page_results.php</span> <span class="smaller">(Now using the zc157 version as the change-basis)</span></li>
                         <li>/includes/classes/observers/class.products_pagination_observer.php</li>

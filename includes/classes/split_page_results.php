@@ -17,7 +17,6 @@ if (!defined('IS_ADMIN_FLAG')) {
  * An sql paging class, that allows for sql result to be shown over a number of pages using simple navigation system
  * Overhaul scheduled for subsequent release
  *
- * @package classes
  */
 //-bof-product_pagination-lat9  *** 1 of 2 ***
 // -----

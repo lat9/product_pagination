@@ -14,9 +14,12 @@ if (!defined('IS_ADMIN_FLAG')) {
 // Since that class uses a common function provided by the pagination observer, the split_page_results
 // class needs to be loaded after that.
 //
+// Note:  Adding that 'forceLoad' element for continued operation under zc157 (and later?).
+//
 $autoLoadConfig[117][] = array (
     'autoType' => 'class',
-    'loadFile' => 'split_page_results.php'
+    'loadFile' => 'split_page_results.php',
+    'forceLoad' => true
 );
 
 $autoLoadConfig[116][] = array (
