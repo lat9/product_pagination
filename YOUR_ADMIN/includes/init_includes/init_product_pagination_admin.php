@@ -5,7 +5,7 @@
 // Starting with v2.0.0 of the plugin, perform the auto-install of the various configuration items.
 //
 define('PRODUCTS_PAGINATION_VERSION_CURRENT', '2.1.0');
-define('PRODUCTS_PAGINATION_VERSION_CURRENT_DATE', '06-06-2020');
+define('PRODUCTS_PAGINATION_VERSION_CURRENT_DATE', '06-14-2020');
 
 $pp_current_version = PRODUCTS_PAGINATION_VERSION_CURRENT . ' (' . PRODUCTS_PAGINATION_VERSION_CURRENT_DATE . ')';
 
