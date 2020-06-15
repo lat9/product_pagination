@@ -355,7 +355,7 @@ class splitPageResults extends base
                 $onchange = "document.getElementById('pp-which-input').value = 'p-" . $this->input_page_suffix . "'; ";
                 $this->hidden_var_added = true;
             } else {
-                $form = zen_draw_form('pp_page_form', zen_href_link($_GET['main_page'], zen_get_all_get_params(array('page'))), 'get');
+                $form = zen_draw_form('pp_page_form' . $this->input_page_suffix, zen_href_link($_GET['main_page'], zen_get_all_get_params(array('page'))), 'get');
                 $end_form = '</form>';
                 $var_name = 'page';
                 $hidden_vars = $this->createHiddenVars('pagecount');
