@@ -73,7 +73,7 @@ th { background-color: #eee; }
 
 <body>
   <h1>Products' Pagination <span class="smaller">for Zen Cart v1.5.5 (and later)</span></h1>
-  <h3>Version 2.1.0 by lat9 and torvista</h3>
+  <h3>Version 2.1.1 by lat9 and torvista</h3>
   <h3>Copyright &copy; 2010-2020 <a href="https://vinosdefrutastropicales.com" target="_blank">Vinos de Frutas Tropicales</a>. All rights reserved.</h3>
   <hr />
   <p>Current Support Thread at Zen Cart Forums: <a href="https://www.zen-cart.com/forum/showthread.php?t=169227" target="_blank">https://www.zen-cart.com/forum/showthread.php?t=169227</a></p>
@@ -225,6 +225,13 @@ th { background-color: #eee; }
             
             <div id="changes">
               <ul>
+                <li>v2.1.1-beta1, 2020-06-15 (torvista and lat9):<ul>
+                    <li>BUGFIX: Ensure unique form-name on multi-page listings with no top/bottom submit button.</li>
+                    <li>The following files were changed:<ol>
+                        <li>/includes/classes/pp_split_page_results.php</li>
+                        <li>/YOUR_ADMIN/includes/init_includes/init_product_pagination_admin.php</li>
+                    </ol></li>
+                </ul></li>
                 <li>v2.1.0, 2020-06-14 (torvista and lat9):<ul>
                     <li>BUGFIX: Correct various PHP notices and processing errors in the plugin's observer-class.</li>
                     <li>BUGFIX: Use correct variable name in the plugin's split-page class.</li>
@@ -243,6 +250,7 @@ th { background-color: #eee; }
                         <li><span class="template">/includes/templates/YOUR_TEMPLATE/templates/tpl_index_product_list.php</span></li>
                         <li><span class="template">/includes/templates/YOUR_TEMPLATE/templates/tpl_modules_listing_display_order.php</span></li>
                         <li><span class="template">/includes/templates/YOUR_TEMPLATE/templates/tpl_products_next_previous.php</span></li>
+                        <li>/YOUR_ADMIN/includes/init_includes/init_product_pagination_admin.php</li>
                     </ol></li>
                 </ul></li>
                 <li>v2.0.0, 2016-09-25:<ul>

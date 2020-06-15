@@ -311,7 +311,7 @@ class splitPageResults extends base
                     $this->hidden_var_added = true;
                 } else {
                     $formPage = ($_GET['main_page'] == FILENAME_ADVANCED_SEARCH_RESULT) ? FILENAME_ADVANCED_SEARCH : $_GET['main_page'];
-                    $form = zen_draw_form('pp_count_form', zen_href_link ($formPage, zen_get_all_get_params(array('pagecount'))), 'get');
+                    $form = zen_draw_form('pp_count_form' . $this->input_pagecount_suffix, zen_href_link ($formPage, zen_get_all_get_params(array('pagecount'))), 'get');
                     $end_form = '</form>';
                     $var_name = 'pagecount';
                     $hidden_vars = $this->createHiddenVars('page');
