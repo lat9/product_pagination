@@ -1,7 +1,7 @@
 <?php
 // -----
 // Part of the "Product Pagination" plugin by lat9 (lat9@vinosdefrutastropicales.com)
-// Copyright (c) 2010-2020 Vinos de Frutas Tropicales
+// Copyright (c) 2010-2021 Vinos de Frutas Tropicales
 // 
 if (!defined('IS_ADMIN_FLAG')) {
     die('Illegal Access');
@@ -17,27 +17,28 @@ class splitPageResults extends base
     protected $current_page_number, 
               $number_of_rows_per_page, 
               $page_name;
+
     public    $sql_query,
               $number_of_rows,
               $number_of_pages;
-    
+
     public function __construct($query, $max_rows, $count_key = '*', $page_holder = 'page', $debug = false, $countQuery = '') 
     {
         global $db;
-        
-        $this->debug = array();
-    
+
+        $this->debug = [];
+
         $max_rows = ($max_rows == '' || $max_rows <= 0) ? 20 : $max_rows;
         $this->minimum_rows = $max_rows;
-        
+
         $this->input_page_suffix = 1;
         $this->input_pagecount_suffix = 1;
         $this->hidden_var_added = false;
-        
+
         // -----
         // If the plugin has been configured to provide an items-per-page dropdown ...
         //
-        if (PRODUCTS_PAGINATION_PRODUCT_COUNT == 'true') {    
+        if (PRODUCTS_PAGINATION_PRODUCT_COUNT == 'true') {
             $page_count_array = explode (',', PRODUCTS_PAGINATION_COUNT_VALUES);
             if (count($page_count_array) > 0) {
                 sort($page_count_array, SORT_NUMERIC);
@@ -65,9 +66,9 @@ class splitPageResults extends base
             }
         }
 
-        $this->sql_query = preg_replace("/\n\r|\r\n|\n|\r/", ' ', $query);
+        $this->sql_query = str_replace(["\n\r", "\r\n", "\n", "\r"], ' ', $query);
         if ($countQuery != '') {
-            $countQuery = preg_replace("/\n\r|\r\n|\n|\r/", ' ', $countQuery);
+            $countQuery = str_replace(["\n\r", "\r\n", "\n", "\r"], ' ', $countQuery);
         }
         $this->countQuery = ($countQuery != '') ? $countQuery : $this->sql_query;
         $this->page_name = $page_holder;
@@ -85,37 +86,29 @@ class splitPageResults extends base
             $page = '';
         }
 
-        if (empty($page) || !is_numeric($page) || $page < 0) {
+        if (empty($page) || !ctype_digit($page) || $page < 0) {
             $page = 1;
         }
         $this->current_page_number = $page;
 
-        $pos_to = strlen($this->countQuery);
-
+        // -----
+        // If the very last 'ORDER BY' clause contains no other SQL directives, drop
+        // this to save some processing time when we determine how many records
+        // will be returned by the query, for pagination.  Otherwise, that 'ORDER BY'
+        // clause is part of a sub-query, which could be significant when counting the
+        // number of records.
+        //
         $query_lower = strtolower($this->countQuery);
-        $pos_from = strpos($query_lower, ' from', 0);
-
-        $pos_group_by = strpos($query_lower, ' group by', $pos_from);
-        if ($pos_group_by !== false && $pos_group_by < $pos_to) {
-            $pos_to = $pos_group_by;
+        $query_parts = explode('order by', $query_lower);
+        $num_parts = count($query_parts);
+        if (count($query_parts) !== 1) {
+            if (!preg_match('/ from | where | join | group by | having /', $query_parts[$num_parts - 1])) {
+                array_pop($query_parts);
+            }
         }
+        $query_lower = implode('order by', $query_parts);
 
-        $pos_having = strpos($query_lower, ' having', $pos_from);
-        if ($pos_having !== false && $pos_having < $pos_to) {
-            $pos_to = $pos_having;
-        }
-
-        $pos_order_by = strpos($query_lower, ' order by', $pos_from);
-        if ($pos_order_by !== false && $pos_order_by < $pos_to) {
-            $pos_to = $pos_order_by;
-        }
-
-        if ((strpos($query_lower, 'distinct') || strpos($query_lower, 'group by')) && $count_key != '*') {
-            $count_string = 'distinct ' . zen_db_input ($count_key);
-        } else {
-            $count_string = zen_db_input($count_key);
-        }
-        $count_query = "SELECT count(" . $count_string . ") AS total " . substr($this->countQuery, $pos_from, $pos_to - $pos_from);
+        $count_query = "SELECT count(*) AS `total` FROM (" . $query_lower . ") AS `result`";
         
         $this->debug[] = "count_query = $count_query";
 
@@ -143,11 +136,6 @@ class splitPageResults extends base
         }
 
         $offset = $this->number_of_rows_per_page * ($this->current_page_number - 1);
-
-        // fix offset error on some versions
-        if ($offset <= 0) { 
-            $offset = 0; 
-        }
 
         $this->sql_query .= " LIMIT " . ($offset > 0 ? $offset . ", " : '') . $this->number_of_rows_per_page;
     }
@@ -260,6 +248,11 @@ class splitPageResults extends base
         return ($to_num <= 1) ? '' : sprintf($text_output, $from_num, $to_num, $this->number_of_rows);
     }
 
+    public function getSqlQuery()
+    {
+        return $this->sql_query;
+    }
+
     private function formatPageLink($title, $name, $page_link_parms, $display_flag=true, $extra_class='') 
     {
         global $request_type;
@@ -318,27 +311,27 @@ class splitPageResults extends base
                     $onchange = '';
                 }
                 $dropdown_id = 'id="pp-pc-' . $this->input_pagecount_suffix . '"';
-          
+
                 $whichCount = (isset($_GET['pagecount']) && $_GET['pagecount'] == 'all') ? 'all' : $whichCount;
-          
+
                 $dropdown  = PHP_EOL . '<div class="pp_count">' . $form . zen_hide_session_id();
 
                 $dropdown .= $hidden_vars;
                 $dropdown .= PP_TEXT_ITEMS_PER_PAGE . zen_draw_pull_down_menu($var_name, $pageArray, $whichCount, $dropdown_id . ' onchange="' . $onchange . 'this.form.submit();"') . $end_form . '</div>' . PHP_EOL;
-                
+
                 $this->input_pagecount_suffix++;
             }
         }
         return $dropdown;
     }
-    
+
     private function createPageDropdown($lastPage, $current_page) 
     {
         $dropdown = '';
         if ($lastPage > 1) {
-            $pageArray = array();
+            $pageArray = [];
             for ($i = 1; $i <= $lastPage; $i++) {
-                $pageArray[] = array('id' => $i, 'text' => $i);
+                $pageArray[] = ['id' => $i, 'text' => $i];
             }
             // -----
             // If called from a page where the "multiple products add to cart" is enabled, the form that's
@@ -366,17 +359,17 @@ class splitPageResults extends base
             $dropdown = PHP_EOL . '<div class="pp_page">' . $form . PP_TEXT_PAGE . zen_draw_pull_down_menu($var_name, $pageArray, $current_page, $dropdown_id . ' onchange="' . $onchange . 'this.form.submit();"') . $hidden_vars . $end_form . '</div>' . PHP_EOL;
             
             $this->input_page_suffix++;
-            
+
         }
         return $dropdown;
     }
-    
+
     private function formCreated()
     {
         global $show_top_submit_button, $show_bottom_submit_button;
         return (!empty($show_top_submit_button) || !empty($show_bottom_submit_button));
     }
-    
+
     private function createHiddenVars($additional_var = '')
     {
         $hidden_vars = ppHiddenVarsList();
