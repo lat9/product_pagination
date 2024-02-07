@@ -54,10 +54,9 @@ class splitPageResults extends base {
     private int $input_page_suffix;
     private $minimum_rows;
 
-
-    public function __construct($query, $max_rows, $count_key = '*', $page_holder = 'page', $debug = false, $countQuery = '')
-    {
-        global $db;
+  /* class constructor */
+  function __construct($query, $max_rows, $count_key = '*', $page_holder = 'page', $debug = false, $countQuery = "") {
+    global $db;
 
         $this->debug = [];
 
@@ -104,25 +103,25 @@ class splitPageResults extends base {
             $countQuery = str_replace(["\n\r", "\r\n", "\n", "\r"], ' ', $countQuery);
         }
         $this->countQuery = ($countQuery != '') ? $countQuery : $this->sql_query;
-        $this->page_name = $page_holder;
+    $this->page_name = $page_holder;
 
         $this->debug[] = "Original query: $query";
         $this->debug[] = "Original count-query: $countQuery";
         $this->debug[] = "SQL query: " . $this->sql_query;
         $this->debug[] = "count query: " . $this->countQuery;
 
-        if (isset($_GET[$page_holder])) {
-            $page = $_GET[$page_holder];
-        } elseif (isset($_POST[$page_holder])) {
-            $page = $_POST[$page_holder];
-        } else {
-            $page = '';
-        }
+    if (isset($_GET[$page_holder])) {
+      $page = $_GET[$page_holder];
+    } elseif (isset($_POST[$page_holder])) {
+      $page = $_POST[$page_holder];
+    } else {
+      $page = '';
+    }
 
         if (empty($page) || !ctype_digit($page) || $page < 0) {
             $page = 1;
         }
-        $this->current_page_number = $page;
+    $this->current_page_number = $page;
 
         // -----
         // If the very last 'ORDER BY' clause contains no other SQL directives, drop
@@ -131,21 +130,21 @@ class splitPageResults extends base {
         // clause is part of a sub-query, which could be significant when counting the
         // number of records.
         //
-        $query_lower = strtolower($this->countQuery);
+    $query_lower = strtolower($this->countQuery);
         $query_parts = explode('order by', $query_lower);
         $num_parts = count($query_parts);
         if (count($query_parts) !== 1) {
             if (!preg_match('/ from | where | join | group by | having /', $query_parts[$num_parts - 1])) {
                 array_pop($query_parts);
-            }
-        }
+    }
+    }
         $query_lower = implode('order by', $query_parts);
 
         $count_query = "SELECT count(*) AS `total` FROM (" . $query_lower . ") AS `result`";
 
         $this->debug[] = "count_query = $count_query";
 
-        $count = $db->Execute($count_query);
+    $count = $db->Execute($count_query);
 
         // -----
         // Now that the items/page is a $_GET variable, need to do some additional sanitization.  There's a case where
@@ -153,7 +152,8 @@ class splitPageResults extends base {
         // that number.  If that condition is found, force the items-per-page to the minimum value.
         //
         $this->number_of_rows_per_page = $max_rows;
-        $this->number_of_rows = $count->fields['total'];
+    $this->number_of_rows = $count->fields['total'];
+
         if (isset($pagecnt)) {
             if ($pagecnt == 'all') {
                 $this->number_of_rows_per_page = ($this->number_of_rows > 0) ? $this->number_of_rows : 20;
@@ -162,26 +162,30 @@ class splitPageResults extends base {
                 $_GET['pagecount'] = $this->minimum_rows;
             }
         }
-        $this->number_of_pages = ceil($this->number_of_rows / $this->number_of_rows_per_page);
+    $this->number_of_pages = ceil($this->number_of_rows / $this->number_of_rows_per_page);
 
-        if ($this->current_page_number > $this->number_of_pages) {
-            $this->current_page_number = $this->number_of_pages;
-        }
+    if ($this->current_page_number > $this->number_of_pages) {
+      $this->current_page_number = $this->number_of_pages;
+    }
 
         $offset = $this->number_of_rows_per_page * ($this->current_page_number - 1);
 
         $this->sql_query .= " LIMIT " . ($offset > 0 ? $offset . ", " : '') . $this->number_of_rows_per_page;
-    }
 
-    public function display_links($max_page_links, $parameters = '')
-    {
-        global $request_type;
+  }
+
+  /* class functions */
+
+  // display split-page-number-links
+  public function display_links($max_page_links, $parameters = '', $outputAsUnorderedList = false, $navElementLabel = '') {
+    global $request_type;
         if (empty($max_page_links)) {
             $max_page_links = 1;
         }
 
         $display_links_string = '';
-        $class = '';
+
+    $class = '';
 
         if (zen_not_null($parameters) && substr($parameters, -1) != '&') {
             $parameters .= '&';
@@ -200,7 +204,7 @@ class splitPageResults extends base {
                 for ($i = 1; $i <= $this->number_of_pages; $i++) {
                     $display_links_string .= $this->formatPageLink(sprintf(PREVNEXT_TITLE_PAGE_NO, $i), $i, $parameters . $this->page_name . '=' . $i, true, ($i == $this->current_page_number) ? ' class="currentpage"' : '');
                 }
-            } else {
+    } else {
                 $current_page_index = $this->current_page_number - 1;
                 $first_link = $current_page_index - floor(PRODUCTS_PAGINATION_MID_RANGE / 2);
                 $last_link  = $current_page_index + floor(PRODUCTS_PAGINATION_MID_RANGE  /2);
@@ -208,7 +212,8 @@ class splitPageResults extends base {
                 if ($first_link < 0) {
                     $last_link += abs($first_link);
                     $first_link = 0;
-                }
+    }
+
 
                 $last_page_index = $this->number_of_pages - 1 ;
                 if ($last_link > $last_page_index) {
@@ -228,10 +233,10 @@ class splitPageResults extends base {
 
                     if ($display_range[PRODUCTS_PAGINATION_MID_RANGE-1] < $last_page_index-1 && $i == $display_range[PRODUCTS_PAGINATION_MID_RANGE-1]) {
                         $display_links_string .= '<li class="mid"> &hellip; </li>';
-                    }
+    }
 
-                }
-            }
+      }
+    }
 
             $display_links_string .= $this->formatPageLink(
                 PREVNEXT_TITLE_NEXT_PAGE,
@@ -242,7 +247,7 @@ class splitPageResults extends base {
             );
 
             $display_links_string .= '</ul><div class="clearBoth"></div>';
-        }
+    }
 
         $extra_links = '';
         if (PRODUCTS_PAGINATION_DISPLAY_PAGEDROP == 'true') {
@@ -253,38 +258,38 @@ class splitPageResults extends base {
         }
         if ($extra_links != '') {
             $extra_links = '<div class="pp-selections">' . $extra_links . '<div class="clearBoth"></div></div>';
-        }
+    }
 
         if ($display_links_string != '' || $extra_links != '') {
             $display_links_string = '<div class="ppNextPrevWrapper"><div class="prod-pagination">' . $display_links_string . '</div>' . $extra_links . '<div class="clearBoth"></div></div>';
-        }
-
-        return $display_links_string;
     }
+    // return unformatted collection of a-hrefs
+    return $display_links_string;
+  }
 
-    // display number of total products found
-    public function display_count($text_output)
-    {
-        $to_num = ($this->number_of_rows_per_page * $this->current_page_number);
+  // display number of total products found
+  function display_count($text_output) {
+    $to_num = ($this->number_of_rows_per_page * $this->current_page_number);
         if ($to_num > $this->number_of_rows) {
             $to_num = $this->number_of_rows;
         }
 
-        $from_num = $this->number_of_rows_per_page * ($this->current_page_number - 1);
+    $from_num = ($this->number_of_rows_per_page * ($this->current_page_number - 1));
 
-        if ($to_num == 0) {
-            $from_num = 0;
-        } else {
-            $from_num++;
+    if ($to_num == 0) {
+      $from_num = 0;
+    } else {
+      $from_num++;
         }
 
         return ($to_num <= 1) ? '' : sprintf($text_output, $from_num, $to_num, $this->number_of_rows);
     }
 
-    public function getSqlQuery()
-    {
-        return $this->sql_query;
-    }
+
+  public function getSqlQuery()
+  {
+      return $this->sql_query;
+  }
 
     private function formatPageLink($title, $name, $page_link_parms, $display_flag=true, $extra_class='')
     {
@@ -335,14 +340,14 @@ class splitPageResults extends base {
                     $hidden_vars = ($this->hidden_var_added) ? '' : zen_draw_hidden_field('pp_which_input', '0', 'id="pp-which-input"');
                     $onchange = "document.getElementById('pp-which-input').value = 'pc-" . $this->input_pagecount_suffix . "'; ";
                     $this->hidden_var_added = true;
-                } else {
+    } else {
                     $formPage = ($_GET['main_page'] == FILENAME_ADVANCED_SEARCH_RESULT) ? FILENAME_ADVANCED_SEARCH : $_GET['main_page'];
                     $form = zen_draw_form('pp_count_form' . $this->input_pagecount_suffix, zen_href_link ($formPage, zen_get_all_get_params(array('pagecount'))), 'get');
                     $end_form = '</form>';
                     $var_name = 'pagecount';
                     $hidden_vars = $this->createHiddenVars('page');
                     $onchange = '';
-                }
+    }
                 $dropdown_id = 'id="pp-pc-' . $this->input_pagecount_suffix . '"';
 
                 $whichCount = (isset($_GET['pagecount']) && $_GET['pagecount'] == 'all') ? 'all' : $whichCount;
@@ -353,7 +358,7 @@ class splitPageResults extends base {
                 $dropdown .= PP_TEXT_ITEMS_PER_PAGE . zen_draw_pull_down_menu($var_name, $pageArray, $whichCount, $dropdown_id . ' onchange="' . $onchange . 'this.form.submit();"') . $end_form . '</div>' . PHP_EOL;
 
                 $this->input_pagecount_suffix++;
-            }
+  }
         }
         return $dropdown;
     }
