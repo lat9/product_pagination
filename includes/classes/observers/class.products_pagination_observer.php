@@ -6,22 +6,21 @@
 if (!defined('IS_ADMIN_FLAG')) {
     die('Illegal Access');
 }
-
-class products_pagination_observer extends base 
+class products_pagination_observer extends base
 {
-    public function __construct() 
+    public function __construct()
     {
         $this->id_array = [];
         $this->product_names_array = [];
-        
+
         $this->attach(
-            $this, 
-            [ 
-                /* From /includes/init_includes/init_canonical.php */ 
+            $this,
+            [
+                /* From /includes/init_includes/init_canonical.php */
                 'NOTIFY_INIT_CANONICAL_PARAM_WHITELIST'
             ]
         );
-        
+
         if (!class_exists('Mobile_Detect')) {
             require_once DIR_WS_CLASSES . 'Mobile_Detect.php';
         }
@@ -29,7 +28,7 @@ class products_pagination_observer extends base
         $this->isTablet = $detect->isTablet() || (isset($_SESSION['layoutType']) && $_SESSION['layoutType'] === 'tablet');
         $this->isMobile = (!$detect->isTablet() && $detect->isMobile()) || (isset($_SESSION['layoutType']) && $_SESSION['layoutType'] === 'mobile');
         $this->isDesktop = !($this->isTablet || $this->isMobile);
-        
+
         $this->isEnabled = (defined('PRODUCTS_PAGINATION_ENABLE') && PRODUCTS_PAGINATION_ENABLE === 'true');
         $this->isEnabledMobile = $this->isEnabled && (defined('PRODUCTS_PAGINATION_ENABLE_MOBILE') && PRODUCTS_PAGINATION_ENABLE_MOBILE === 'true');
     }
@@ -46,9 +45,9 @@ class products_pagination_observer extends base
 
             default:
                 break;
-        }   
+        }
     }
-    
+
     // -----
     // This function returns a boolean value indicating whether or not the plugin is to be used on the current page.
     //
@@ -63,7 +62,7 @@ class products_pagination_observer extends base
         $this->pagePaginationEnabled = $enabled;
         return $enabled;
     }
-    
+
     // -----
     // This function, called by the plugin's /includes/modules/pp_product_prev_next.php, initializes the information needed to
     // display the products' next/prev links.
@@ -110,10 +109,10 @@ class products_pagination_observer extends base
 
             $sql = "SELECT p.products_id, p.products_model, p.products_price_sorter, pd.products_name, p.products_sort_order
                       FROM " . TABLE_PRODUCTS . " p, " . TABLE_PRODUCTS_DESCRIPTION . " pd, " . TABLE_PRODUCTS_TO_CATEGORIES . " ptc
-                     WHERE p.products_status = 1 
-                       AND p.products_id = pd.products_id 
-                       AND pd.language_id = " . (int)$_SESSION['languages_id'] . " 
-                       AND p.products_id = ptc.products_id 
+                     WHERE p.products_status = 1
+                       AND p.products_id = pd.products_id
+                       AND pd.language_id = " . (int)$_SESSION['languages_id'] . "
+                       AND p.products_id = ptc.products_id
                        AND ptc.categories_id = " . (int)$current_category_id . $prev_next_order;
             $products_ids = $db->Execute($sql);
             $this->products_found_count = $products_ids->RecordCount();
@@ -147,7 +146,7 @@ class products_pagination_observer extends base
 
                 $sql = "SELECT categories_name
                           FROM " . TABLE_CATEGORIES_DESCRIPTION . "
-                         WHERE categories_id = " . (int)$current_category_id . " 
+                         WHERE categories_id = " . (int)$current_category_id . "
                            AND language_id = " . (int)$_SESSION['languages_id'] . " LIMIT 1";
 
                 $category_name_row = $db->Execute($sql);
@@ -155,7 +154,7 @@ class products_pagination_observer extends base
             }
         }
     }
-    
+
     // -----
     // Return the number of products found for the previous/next display.
     //
@@ -171,7 +170,7 @@ class products_pagination_observer extends base
     {
         return $this->counter;
     }
-    
+
     // -----
     // Return the current 'position' within the products' list.
     //
@@ -179,7 +178,7 @@ class products_pagination_observer extends base
     {
         return $this->position;
     }
-    
+
     // -----
     // Return the link to the products' listing for the cPath associated with the current set of products.
     //
@@ -187,7 +186,7 @@ class products_pagination_observer extends base
     {
         return zen_href_link(FILENAME_DEFAULT, 'cPath=' . $this->cPath);
     }
-    
+
     // -----
     // Return the formatted version of the current category name, used for link titles.
     //
@@ -195,7 +194,7 @@ class products_pagination_observer extends base
     {
         return sprintf(PP_TEXT_PRODUCT_LISTING_TITLE, $this->category_name);
     }
-    
+
     // -----
     // Return the page-link parameters (the cPath and products_id) determined during
     // initialization.
@@ -204,7 +203,7 @@ class products_pagination_observer extends base
     {
         return $this->page_link_parms;
     }
-    
+
     // -----
     // A collection of functions, used to retrieve the product's ID and name
     // associated with a given location in the search list.
