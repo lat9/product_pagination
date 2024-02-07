@@ -2,27 +2,60 @@
 // -----
 // Part of the "Product Pagination" plugin by lat9 (lat9@vinosdefrutastropicales.com)
 // Copyright (c) 2010-2021 Vinos de Frutas Tropicales
-// 
+// Base File: lat9 2023 Apr 12 Modified in v2.0.0-alpha1 $
 if (!defined('IS_ADMIN_FLAG')) {
-    die('Illegal Access');
+  die('Illegal Access');
 }
-
+/**
+ * Split Page Result Class
+ *
+ * An sql paging class, that allows for sql result to be shown over a number of pages using simple navigation system
+ * Overhaul scheduled for subsequent release
+ *
+ */
 // -----
 // This class, included by the main split_pages_result.php class when the plugin is enabled, overrides the name/handling of that
 // base class.  It's active ONLY WHEN the plugin has been configured to provide processing on "other", non-product-details type pages
 // and the current page is in that configuration.
 //
-class splitPageResults extends base 
-{
-    protected $current_page_number, 
-              $number_of_rows_per_page, 
-              $page_name;
+class splitPageResults extends base {
 
-    public    $sql_query,
-              $number_of_rows,
-              $number_of_pages;
+    /**
+     * Database field used to define unique item to count. Becomes the sql query.
+     */
+    private string $countQuery;
+    /**
+     * Current page number
+     */
+    public $current_page_number;
+    /**
+     * Total number of pages;
+     */
+    public $number_of_pages;
+    /**
+     * Total Number of unique rows from $countQuery
+     */
+    public $number_of_rows;
+    /**
+     * maximum number of rows to display on a page
+     */
+    private $number_of_rows_per_page;
+    /**
+     *  The form name of field that holds the current page number
+     */
+    private string $page_name;
+    /**
+     * Query used to select items for page
+     */
+    public string $sql_query;
+    private $debug;
+    private bool $hidden_var_added;
+    private int $input_pagecount_suffix;
+    private int $input_page_suffix;
+    private $minimum_rows;
 
-    public function __construct($query, $max_rows, $count_key = '*', $page_holder = 'page', $debug = false, $countQuery = '') 
+
+    public function __construct($query, $max_rows, $count_key = '*', $page_holder = 'page', $debug = false, $countQuery = '')
     {
         global $db;
 
@@ -42,7 +75,7 @@ class splitPageResults extends base
             $page_count_array = explode (',', PRODUCTS_PAGINATION_COUNT_VALUES);
             if (count($page_count_array) > 0) {
                 sort($page_count_array, SORT_NUMERIC);
-                if ($page_count_array[0] != '*' && ((int)$page_count_array[0]) >= 0) { 
+                if ($page_count_array[0] != '*' && ((int)$page_count_array[0]) >= 0) {
                     $this->minimum_rows = $page_count_array[0];
                 } elseif (count ($page_count_array) > 1 && $page_count_array[1] != '*' && ((int)$page_count_array[1]) >= 0) {
                     $this->minimum_rows = $page_count_array[1];
@@ -77,7 +110,7 @@ class splitPageResults extends base
         $this->debug[] = "Original count-query: $countQuery";
         $this->debug[] = "SQL query: " . $this->sql_query;
         $this->debug[] = "count query: " . $this->countQuery;
- 
+
         if (isset($_GET[$page_holder])) {
             $page = $_GET[$page_holder];
         } elseif (isset($_POST[$page_holder])) {
@@ -109,7 +142,7 @@ class splitPageResults extends base
         $query_lower = implode('order by', $query_parts);
 
         $count_query = "SELECT count(*) AS `total` FROM (" . $query_lower . ") AS `result`";
-        
+
         $this->debug[] = "count_query = $count_query";
 
         $count = $db->Execute($count_query);
@@ -140,7 +173,7 @@ class splitPageResults extends base
         $this->sql_query .= " LIMIT " . ($offset > 0 ? $offset . ", " : '') . $this->number_of_rows_per_page;
     }
 
-    public function display_links($max_page_links, $parameters = '') 
+    public function display_links($max_page_links, $parameters = '')
     {
         global $request_type;
         if (empty($max_page_links)) {
@@ -158,9 +191,9 @@ class splitPageResults extends base
             $ulClass = ' class="pagination-links"';
             if (PRODUCTS_PAGINATION_DISPLAY_PAGEDROP == 'true' || PRODUCTS_PAGINATION_PRODUCT_COUNT == 'true') {
                 $ulClass = ' class="pp_float pagination-links"';
-            }     
+            }
             $display_links_string .= '<ul' . $ulClass . '>';
-            
+
             $display_links_string .= $this->formatPageLink(PREVNEXT_TITLE_PREVIOUS_PAGE, PP_TEXT_PREVIOUS, $parameters . $this->page_name . '=' . ($this->current_page_number - 1), ($this->current_page_number > 1) ? true : false, ' class="prevnext"');
 
             if ($this->number_of_pages <= PRODUCTS_PAGINATION_MAX) {
@@ -199,18 +232,18 @@ class splitPageResults extends base
 
                 }
             }
-    
+
             $display_links_string .= $this->formatPageLink(
-                PREVNEXT_TITLE_NEXT_PAGE, 
-                PP_TEXT_NEXT, 
-                $parameters . $this->page_name . '=' . ($this->current_page_number + 1), 
-                $this->current_page_number != $this->number_of_pages, 
+                PREVNEXT_TITLE_NEXT_PAGE,
+                PP_TEXT_NEXT,
+                $parameters . $this->page_name . '=' . ($this->current_page_number + 1),
+                $this->current_page_number != $this->number_of_pages,
                 ' class="prevnext"'
             );
-            
+
             $display_links_string .= '</ul><div class="clearBoth"></div>';
         }
-            
+
         $extra_links = '';
         if (PRODUCTS_PAGINATION_DISPLAY_PAGEDROP == 'true') {
             $extra_links .= $this->createPageDropdown ($this->number_of_pages, $this->current_page_number);
@@ -224,13 +257,13 @@ class splitPageResults extends base
 
         if ($display_links_string != '' || $extra_links != '') {
             $display_links_string = '<div class="ppNextPrevWrapper"><div class="prod-pagination">' . $display_links_string . '</div>' . $extra_links . '<div class="clearBoth"></div></div>';
-        }  
+        }
 
         return $display_links_string;
     }
 
     // display number of total products found
-    public function display_count($text_output) 
+    public function display_count($text_output)
     {
         $to_num = ($this->number_of_rows_per_page * $this->current_page_number);
         if ($to_num > $this->number_of_rows) {
@@ -253,7 +286,7 @@ class splitPageResults extends base
         return $this->sql_query;
     }
 
-    private function formatPageLink($title, $name, $page_link_parms, $display_flag=true, $extra_class='') 
+    private function formatPageLink($title, $name, $page_link_parms, $display_flag=true, $extra_class='')
     {
         global $request_type;
         if ($display_flag) {
@@ -262,9 +295,9 @@ class splitPageResults extends base
             $returnValue = '<li><span class="prevnext disablelink">' . $name . '</span></li>';
         }
         return $returnValue;
-    } 
+    }
 
-    private function createCountDropdown($numItems, $whichCount) 
+    private function createCountDropdown($numItems, $whichCount)
     {
         $dropdown = '';
         $countArray = explode(',', PRODUCTS_PAGINATION_COUNT_VALUES);
@@ -286,7 +319,7 @@ class splitPageResults extends base
 
             //-----
             // Only display the dropdown if there's more than one item counts to display
-            //    
+            //
             if (count($pageArray) > 1) {
                 // -----
                 // If called from either an listing or the advanced search results page and "multiple products add to cart" is
@@ -325,7 +358,7 @@ class splitPageResults extends base
         return $dropdown;
     }
 
-    private function createPageDropdown($lastPage, $current_page) 
+    private function createPageDropdown($lastPage, $current_page)
     {
         $dropdown = '';
         if ($lastPage > 1) {
@@ -357,7 +390,7 @@ class splitPageResults extends base
             $dropdown_id = 'id="pp-p-' . $this->input_page_suffix . '"';
 
             $dropdown = PHP_EOL . '<div class="pp_page">' . $form . PP_TEXT_PAGE . zen_draw_pull_down_menu($var_name, $pageArray, $current_page, $dropdown_id . ' onchange="' . $onchange . 'this.form.submit();"') . $hidden_vars . $end_form . '</div>' . PHP_EOL;
-            
+
             $this->input_page_suffix++;
 
         }

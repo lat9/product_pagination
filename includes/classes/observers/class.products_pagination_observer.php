@@ -8,6 +8,24 @@ if (!defined('IS_ADMIN_FLAG')) {
 }
 class products_pagination_observer extends base
 {
+
+    private $category_name;
+    private $counter;
+    private $cPath;
+    private $id_array;
+    private $isDesktop;
+    private $isEnabled;
+    private $isEnabledMobile;
+    private $isMobile;
+    private $isTablet;
+    private $next_position;
+    private $pagePaginationEnabled;
+    private $page_link_parms;
+    private $position;
+    private $previous_position;
+    private $products_found_count;// TODO written but never read
+    private $product_names_array;
+
     public function __construct()
     {
         $this->id_array = [];
