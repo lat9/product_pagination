@@ -159,6 +159,11 @@ class products_pagination_observer extends base
                             $this->next_position = 0;
                         }
                     }
+                    //torvista: for bad urls where the friendly url goes to a product, but the suffixed category does not contain that product: $this->previous_position and $this->next_position do not get set, BUT ONLY $this->next_position gives error from public function getNextProductInfo()
+                    //e.g. https://www.website/widget?cPath=3_66_428_1830&
+                    if (!isset($this->next_position)) {
+                        $this->next_position = 0;
+                    }
                     $last = $value;
                     $this->counter++;
                 }
@@ -211,7 +216,7 @@ class products_pagination_observer extends base
     //
     public function getCategoryTitle()
     {
-        return sprintf(PP_TEXT_PRODUCT_LISTING_TITLE, $this->category_name);
+        return htmlentities(sprintf(PP_TEXT_PRODUCT_LISTING_TITLE, $this->category_name), ENT_QUOTES, 'UTF-8', false);
     }
 
     // -----
