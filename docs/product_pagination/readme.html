@@ -98,7 +98,7 @@ th { background-color: #eee; }
           <li>product_info</li>
           <li>product_music_info</li>
         </ul>
-        <p>and optionally (via admin configuration) the previous/next navigation for these other pages in your store:</p>
+        <p>and optionally (via admin configuration) the previous/next navigation for these &quot;<strong>other</strong>&quot; listing pages in your store:</p>
         <ul>
           <li>account_history</li>
           <li>advanced_search_result</li>
@@ -227,8 +227,18 @@ th { background-color: #eee; }
               <ul>
                 <li>v2.1.2, 2024-02 (torvista and lat9):<ul>
                     <li>The following files were changed:<ol>
+                        <li>FIXES for php 8+ and Mobile_Detect:/includes/classes/observers/class.products_pagination_observer.php</li>
+                        <li>FIXES for php 8+:/includes/classes/pp_split_pages_results.php</li>
                         <li><span class="corefile">/includes/classes/split_pages_results.php</span>  <span class="smaller">(now using the zc200 version as the reference file)</span></li>
-                    </ol></li>
+                        <li><span class="corefile">/includes/modules/YOUR_TEMPLATE/product_prev_next.php</span> <span class="smaller">(now using the zc200 version as the reference file)</span></li>
+                        <li>/includes/modules/pp_product_prev_next.php <span class="smaller">(whitespace and short array syntax)</span></li>
+                        <li>/includes/templates/template_default/templates/tpl_pp_products_next_previous <span class="smaller">(whitespace and short array syntax)</span></li>
+                        <li>YOUR_ADMIN/includes/auto_loaders/config.products_pagination_admin.php  <span class="smaller">(whitespace and short array syntax)</span></li>
+                        <li>YOUR_ADMIN/includes/init_includes/init/product_pagination_admin.php <span class="smaller">(whitespace and short array syntax)</span></li>
+                        <li>YOUR_ADMIN/includes/languages/english/extra_definitions/products_pagination.php <span class="smaller">(whitespace and short array syntax)</span></li>
+                        <li>Readme updated</li>
+                    </ol>
+                    </li>
                 </ul></li>
                 <li>v2.1.1, 2021-03-28 (torvista and lat9):<ul>
                     <li>BUGFIX: Ensure unique form-name on multi-page listings with no top/bottom submit button.</li>
