@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
 <title>Products' Pagination</title>
 
-<style type="text/css">
+<style>
 <!--
 a, a:active, a:visited { color: #006666; text-decoration: none; }
 a:hover { color:#00CC99; text-decoration: underline; }
@@ -33,7 +33,7 @@ textarea { width: 100%; }
 .corefile { color: red; }
 .template { color: green; }
 .forward { float: right; }
-.back { float: back; }
+.back { float: left; }
 .clearBoth { clear: both; }
 #buttons, #fa-buttons { margin-left: 20px; width: 300px; }
 #fa-buttons { margin-top: 5px; }
@@ -73,7 +73,7 @@ th { background-color: #eee; }
 
 <body>
   <h1>Products' Pagination <span class="smaller">for Zen Cart v1.5.5 (and later)</span></h1>
-  <h3>Version 2.1.1 by lat9 and torvista</h3>
+  <h3>Version 2.1.2 by lat9 and torvista</h3>
   <h3>Copyright &copy; 2010-2021 <a href="https://vinosdefrutastropicales.com" target="_blank">Vinos de Frutas Tropicales</a>. All rights reserved.</h3>
   <hr />
   <p>Current Support Thread at Zen Cart Forums: <a href="https://www.zen-cart.com/forum/showthread.php?t=169227" target="_blank">https://www.zen-cart.com/forum/showthread.php?t=169227</a></p>
@@ -225,6 +225,11 @@ th { background-color: #eee; }
             
             <div id="changes">
               <ul>
+                <li>v2.1.2, 2024-02 (torvista and lat9):<ul>
+                    <li>The following files were changed:<ol>
+                        <li><span class="corefile">/includes/classes/split_pages_results.php</span>  <span class="smaller">(now using the zc200 version as the reference file)</span></li>
+                    </ol></li>
+                </ul></li>
                 <li>v2.1.1, 2021-03-28 (torvista and lat9):<ul>
                     <li>BUGFIX: Ensure unique form-name on multi-page listings with no top/bottom submit button.</li>
                     <li>BUGFIX: Correct MySQL error on <code>account_history</code> page for zc157 and later.</li>
@@ -346,7 +351,7 @@ th { background-color: #eee; }
     </div>
   </div>
   
-  <script type="text/javascript">
+  <script>
     $('#outer-container, #inner-container2, #inner-container3').easytabs();
     
     $( '.side-link' ).click( function() {
