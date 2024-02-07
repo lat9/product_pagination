@@ -1,8 +1,10 @@
 <?php
 // -----
 // Part of the "Product Pagination" plugin by lat9 (lat9@vinosdefrutastropicales.com)
-// Copyright (c) 2010-2021 Vinos de Frutas Tropicales
-// Base File: lat9 2023 Apr 12 Modified in v2.0.0-alpha1 $
+// Copyright (c) 2010-2024 Vinos de Frutas Tropicales
+// Base File: split_page_results.php lat9 2023 Apr 12 Modified in v2.0.0-alpha1 $
+//
+
 if (!defined('IS_ADMIN_FLAG')) {
   die('Illegal Access');
 }
@@ -48,7 +50,7 @@ class splitPageResults extends base {
      * Query used to select items for page
      */
     public string $sql_query;
-    private $debug;
+    public $debug;
     private bool $hidden_var_added;
     private int $input_pagecount_suffix;
     private int $input_page_suffix;

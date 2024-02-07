@@ -1,8 +1,9 @@
 <?php
 // -----
 // Part of the "Product Pagination" plugin by lat9 (lat9@vinosdefrutastropicales.com)
-// Copyright (c) 2010-2020 Vinos de Frutas Tropicales
+// Copyright (c) 2010-2024 Vinos de Frutas Tropicales
 //
+
 $products_found_count = $ppObserver->productsFoundCount();
 if ($products_found_count > 1) {
     $products_last_index = $products_found_count - 1;

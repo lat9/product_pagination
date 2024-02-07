@@ -1,9 +1,9 @@
 <?php
 // -----
-// Part of the "Products Pagination" plugin by lat9 (lat9@vinosdefrutastropicales.com)
+// Part of the "Product Pagination" plugin by lat9 (lat9@vinosdefrutastropicales.com)
+// Copyright (c) 2010-2024 Vinos de Frutas Tropicales
 //
-// Starting with v2.0.0 of the plugin, perform the auto-install of the various configuration items.
-//
+
 define('PRODUCTS_PAGINATION_VERSION_CURRENT', '2.1.2');
 define('PRODUCTS_PAGINATION_VERSION_CURRENT_DATE', '02-07-2024');
 

@@ -1,8 +1,9 @@
 <?php
 // -----
-// Part of the "Products Pagination" plugin by lat9 (lat9@vinosdefrutastropicales.com)
-// Copyright (c) 2016-2020 Vinos de Frutas Tropicales
+// Part of the "Product Pagination" plugin by lat9 (lat9@vinosdefrutastropicales.com)
+// Copyright (c) 2010-2024 Vinos de Frutas Tropicales
 //
+
 if (!defined('IS_ADMIN_FLAG')) {
     die('Illegal Access');
 }
