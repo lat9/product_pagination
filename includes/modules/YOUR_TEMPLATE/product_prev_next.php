@@ -1,11 +1,15 @@
 <?php
+// -----
+// Part of the "Product Pagination" plugin by lat9 (lat9@vinosdefrutastropicales.com)
+// Copyright (c) 2010-2016 Vinos de Frutas Tropicales
+// 
 /**
  *  product_prev_next.php
  *
- * @copyright Copyright 2003-2020 Zen Cart Development Team
+ * @copyright Copyright 2003-2023 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
  * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
- * @version $Id: Scott C Wilson 2020 Apr 09 Modified in v1.5.7 $
+ * @version $Id: pRose on charmes 2023 Feb 02 Modified in v1.5.8a $
  */
 if (!defined('IS_ADMIN_FLAG')) {
   die('Illegal Access');
@@ -21,32 +25,7 @@ if (isset($ppObserver) && $ppObserver->isPaginationEnabled('product')) {
 } elseif (PRODUCT_INFO_PREVIOUS_NEXT != 0) {
 //-eof-product_pagination-lat9  *** 1 of 1 ***
   // sort order
-  switch(PRODUCT_INFO_PREVIOUS_NEXT_SORT) {
-    case (0):
-    $prev_next_order= ' order by LPAD(p.products_id,11,"0")';
-    break;
-    case (1):
-    $prev_next_order= " order by pd.products_name";
-    break;
-    case (2):
-    $prev_next_order= " order by p.products_model";
-    break;
-    case (3):
-    $prev_next_order= " order by p.products_price_sorter, pd.products_name";
-    break;
-    case (4):
-    $prev_next_order= " order by p.products_price_sorter, p.products_model";
-    break;
-    case (5):
-    $prev_next_order= " order by pd.products_name, p.products_model";
-    break;
-    case (6):
-    $prev_next_order= ' order by LPAD(p.products_sort_order,11,"0"), pd.products_name';
-    break;
-    default:
-    $prev_next_order= " order by pd.products_name";
-    break;
-  }
+    $prev_next_order = zen_products_sort_order();
 
 /*
   if (!$current_category_id || SHOW_CATEGORIES_ALWAYS == 1) {
