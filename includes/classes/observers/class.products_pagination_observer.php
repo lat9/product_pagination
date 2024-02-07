@@ -24,7 +24,7 @@ class products_pagination_observer extends base
         if (!class_exists('Mobile_Detect')) {
             require_once DIR_WS_CLASSES . 'Mobile_Detect.php';
         }
-        $detect = new Mobile_Detect();
+        $detect = new Detection\MobileDetect();
         $this->isTablet = $detect->isTablet() || (isset($_SESSION['layoutType']) && $_SESSION['layoutType'] === 'tablet');
         $this->isMobile = (!$detect->isTablet() && $detect->isMobile()) || (isset($_SESSION['layoutType']) && $_SESSION['layoutType'] === 'mobile');
         $this->isDesktop = !($this->isTablet || $this->isMobile);
