@@ -1,11 +1,14 @@
 <?php
+// Part of the "Product Pagination" plugin by lat9 (lat9@vinosdefrutastropicales.com)
+// Copyright (c) 2010-2024 Vinos de Frutas Tropicales
+//
 /**
  * split_page_results Class.
  *
- * @copyright Copyright 2003-2020 Zen Cart Development Team
+ * @copyright Copyright 2003-2024 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
  * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
- * @version $Id: mc12345678 2020 Sep 29 Modified in v1.5.7a $
+ * @version $Id: lat9 2023 Apr 12 Modified in v2.0.0-alpha1 $
  */
 
 if (!defined('IS_ADMIN_FLAG')) {
@@ -36,7 +39,35 @@ if (defined('STORE_NAME')) {
     } else {
 //-eof-product_pagination-lat9  *** 1 of 2 ***
 class splitPageResults extends base {
-  var $sql_query, $number_of_rows, $current_page_number, $number_of_pages, $number_of_rows_per_page, $page_name;
+    
+    /**
+     * Database field used to define unique item to count. Becomes the sql query.
+     */
+    private $countQuery;
+    /**
+     * Current page number
+     */
+    public $current_page_number;
+    /**
+     * Total number of pages;
+     */
+    public $number_of_pages;
+    /**
+     * Total Number of unique rows from $countQuery
+     */
+    public $number_of_rows;
+    /**
+     * maximum number of rows to display on a page
+     */
+    private $number_of_rows_per_page;
+    /**
+     *  The form name of field that holds the current page number
+     */
+    private $page_name;
+    /**
+     * Query used to select items for page
+     */
+    public $sql_query;
 
   /* class constructor */
   function __construct($query, $max_rows, $count_key = '*', $page_holder = 'page', $debug = false, $countQuery = "") {
@@ -49,11 +80,11 @@ class splitPageResults extends base {
     $this->page_name = $page_holder;
 
     if ($debug) {
-      echo '<br /><br />';
-      echo 'original_query=' . $query . '<br /><br />';
-      echo 'original_count_query=' . $countQuery . '<br /><br />';
-      echo 'sql_query=' . $this->sql_query . '<br /><br />';
-      echo 'count_query=' . $this->countQuery . '<br /><br />';
+      echo '<br><br>';
+      echo 'original_query=' . $query . '<br><br>';
+      echo 'original_count_query=' . $countQuery . '<br><br>';
+      echo 'sql_query=' . $this->sql_query . '<br><br>';
+      echo 'count_query=' . $this->countQuery . '<br><br>';
     }
     if (isset($_GET[$page_holder])) {
       $page = $_GET[$page_holder];
@@ -89,7 +120,7 @@ class splitPageResults extends base {
     }
     $count_query = "select count(" . $count_string . ") as total " . substr($this->countQuery, $pos_from, ($pos_to - $pos_from));
     if ($debug) {
-      echo 'count_query=' . $count_query . '<br /><br />';
+      echo 'count_query=' . $count_query . '<br><br>';
     }
     $count = $db->Execute($count_query);
 
@@ -124,7 +155,7 @@ class splitPageResults extends base {
 
     $class = '';
 
-    if (zen_not_null($parameters) && (substr($parameters, -1) != '&') && ($this->current_page_number > 1)) $parameters .= '&';
+    if (!empty($parameters) && (substr($parameters, -1) != '&') && ($this->current_page_number > 1)) $parameters .= '&';
 
     // previous button - not displayed on first page
     $link = '<a href="' . zen_href_link($_GET['main_page'], $parameters . ($this->current_page_number > 2 ? $this->page_name . '=' . ($this->current_page_number - 1) : ''), $request_type) . '" title="' . PREVNEXT_TITLE_PREVIOUS_PAGE . '">' . PREVNEXT_BUTTON_PREV . '</a>';
@@ -177,7 +208,7 @@ class splitPageResults extends base {
 
     // next button
     if (($this->current_page_number < $this->number_of_pages) && ($this->number_of_pages != 1)) {
-      $link = '<a href="' . zen_href_link($_GET['main_page'], $parameters . 'page=' . ($this->current_page_number + 1), $request_type) . '" title="' . PREVNEXT_TITLE_NEXT_PAGE . '" aria-label="' . ARIA_PAGINATION_NEXT_PAGE . '">' . PREVNEXT_BUTTON_NEXT . '</a>';
+      $link = '<a href="' . zen_href_link($_GET['main_page'], $parameters . $this->page_name . '=' . ($this->current_page_number + 1), $request_type) . '" title="' . PREVNEXT_TITLE_NEXT_PAGE . '" aria-label="' . ARIA_PAGINATION_NEXT_PAGE . '">' . PREVNEXT_BUTTON_NEXT . '</a>';
       $display_links_string .= '&nbsp;' . $link . '&nbsp;';
       $ul_elements .= '  <li class="pagination-next">' . $link . '</li>' . "\n";
     } else {

@@ -1,19 +1,20 @@
 <?php
 // -----
 // Part of the "Product Pagination" plugin by lat9 (lat9@vinosdefrutastropicales.com)
-// Copyright (c) 2010-2020 Vinos de Frutas Tropicales
+// Copyright (c) 2010-2024 Vinos de Frutas Tropicales
 //
+
 $products_found_count = $ppObserver->productsFoundCount();
 if ($products_found_count > 1) {
     $products_last_index = $products_found_count - 1;
 
     $current_position = $ppObserver->currentPosition();
     $display_next_link  = $current_position !== $products_last_index;
-    
+
     $products_count = $ppObserver->getProductsCount();
-    
+
     $page_link_parms = $ppObserver->getPageLinkParameters();
-    
+
     $listing_link_class = (PRODUCTS_PAGINATION_LISTING_LINK === 'true') ? ' class="back pagination-list"' : '';
 ?>
 <div class="ppNextPrevWrapper">
@@ -89,14 +90,14 @@ if ($products_found_count > 1) {
         <li><a href="<?php echo $product_link; ?>"<?php echo $item_class; ?> title="<?php echo htmlentities(zen_clean_html($p_info['name']), ENT_COMPAT, CHARSET); ?>"><?php echo $i + 1; ?></a></li>
 <?php
             }
-            
+
             if ((int)$display_range[PRODUCTS_PAGINATION_MID_RANGE-1] < $products_last_index-1 && $i === (int)$display_range[PRODUCTS_PAGINATION_MID_RANGE-1]) {
 ?>
         <li class="hellip"> ... </li>
 <?php
             }
         }
-    } 
+    }
 
     if ($current_position !== $products_last_index) {
         $next_info = $ppObserver->getNextProductInfo();
@@ -108,8 +109,8 @@ if ($products_found_count > 1) {
     } else {
 ?>
         <li><span class="prevnext disablelink"><?php echo PP_TEXT_NEXT; ?></span></li>
-<?php 
-    } 
+<?php
+    }
 ?>
         </ul>
     </nav>
