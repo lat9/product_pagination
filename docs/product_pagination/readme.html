@@ -38,11 +38,15 @@ ol li, ul li, ul li ul li { margin: 5px 0; padding: 0; }
 
 <body>
     <h1>Products' Pagination <span class="smaller">for Zen Cart v1.5.5 (and later)</span></h1>
-    <h3>Version 2.1.1 by lat9 and torvista</h3>
-    <h3>Copyright &copy; 2010-2021 <a href="https://vinosdefrutastropicales.com" target="_blank">Vinos de Frutas Tropicales</a>. All rights reserved.</h3>
+    <h3>Version 3.0.0 by lat9 and torvista</h3>
+    <h3>Copyright &copy; 2010-2024 <a href="https://vinosdefrutastropicales.com" target="_blank">Vinos de Frutas Tropicales</a>. All rights reserved.</h3>
     <hr>
     <p>Current Support Thread at Zen Cart Forums: <a href="https://www.zen-cart.com/forum/showthread.php?t=169227" target="_blank">https://www.zen-cart.com/forum/showthread.php?t=169227</a></p>
-    <p><strong>Note:</strong> If you are using a Zen Cart version <em>prior to</em> 1.5.5, please use a previous 1.x.x version of <em>Products' Pagination</em>.</p>
+    <p><strong>Notes:</strong></p>
+    <ol>
+        <li>If you are using a Zen Cart version <em>prior to</em> 1.5.8, please use a previous 2.x.x version of <em>Products' Pagination</em>.</li>
+        <li>If you are using a Zen Cart version <em>prior to</em> 1.5.5, please use a previous 1.x.x version of <em>Products' Pagination</em>.</li>
+    </ol>
 
     <h2>Overview</h2>
     <p>This plugin replaces the default previous/next navigation for your store&rsquo;s product information pages:</p>
@@ -109,6 +113,14 @@ ol li, ul li, ul li ul li { margin: 5px 0; padding: 0; }
 
     <h3>Change History</h3>
     <ul>
+        <li>v3.0.0-beta1, 2024-03-24 (torvista and lat9):<ul>
+            <li>CHANGE: Drop support for Zen Cart versions <em>prior to</em> 1.5.8.</li>
+            <li>The following files were changed:<ol>
+                <li>/YOUR_ADMIN/includes/auto_loaders/config.products_pagination_admin.php</li>
+                <li>/YOUR_ADMIN/includes/init_includes/init_product_pagination_admin.php</li>
+                <li>/YOUR_ADMIN/includes/languages/english/extra_definitions/products_pagination.php</li>
+            </ol></li>
+        </ul></li>
         <li>v2.1.1, 2021-03-28 (torvista and lat9):<ul>
             <li>BUGFIX: Ensure unique form-name on multi-page listings with no top/bottom submit button.</li>
             <li>BUGFIX: Correct MySQL error on <code>account_history</code> page for zc157 and later.</li>
