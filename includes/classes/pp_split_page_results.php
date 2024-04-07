@@ -1,7 +1,7 @@
 <?php
 // -----
 // Part of the "Product Pagination" plugin by lat9 (lat9@vinosdefrutastropicales.com)
-// Copyright (c) 2010-2021 Vinos de Frutas Tropicales
+// Copyright (c) 2010-2024 Vinos de Frutas Tropicales
 // 
 if (!defined('IS_ADMIN_FLAG')) {
     die('Illegal Access');
@@ -14,13 +14,18 @@ if (!defined('IS_ADMIN_FLAG')) {
 //
 class splitPageResults extends base 
 {
-    protected $current_page_number, 
-              $number_of_rows_per_page, 
-              $page_name;
-
-    public    $sql_query,
-              $number_of_rows,
-              $number_of_pages;
+    public int $current_page_number;
+    public string $sql_query;
+    public int $number_of_rows;
+    public int $number_of_pages;
+    
+    protected int $number_of_rows_per_page;
+    protected string $page_name;
+    protected string $countQuery;
+    protected $minimumRows;         //- string|int
+    protected int $inputPageSuffix = 1;
+    protected int $inputPagecountSuffix = 1;
+    protected bool $hiddenVarAdded = false;
 
     public function __construct($query, $max_rows, $count_key = '*', $page_holder = 'page', $debug = false, $countQuery = '') 
     {
@@ -29,42 +34,7 @@ class splitPageResults extends base
         $this->debug = [];
 
         $max_rows = ($max_rows == '' || $max_rows <= 0) ? 20 : $max_rows;
-        $this->minimum_rows = $max_rows;
-
-        $this->input_page_suffix = 1;
-        $this->input_pagecount_suffix = 1;
-        $this->hidden_var_added = false;
-
-        // -----
-        // If the plugin has been configured to provide an items-per-page dropdown ...
-        //
-        if (PRODUCTS_PAGINATION_PRODUCT_COUNT == 'true') {
-            $page_count_array = explode (',', PRODUCTS_PAGINATION_COUNT_VALUES);
-            if (count($page_count_array) > 0) {
-                sort($page_count_array, SORT_NUMERIC);
-                if ($page_count_array[0] != '*' && ((int)$page_count_array[0]) >= 0) { 
-                    $this->minimum_rows = $page_count_array[0];
-                } elseif (count ($page_count_array) > 1 && $page_count_array[1] != '*' && ((int)$page_count_array[1]) >= 0) {
-                    $this->minimum_rows = $page_count_array[1];
-                }
-            }
-
-            // -----
-            // Since the pagecount value is now a $_GET variable, need to sanitize its value prior to use, making sure
-            // that the value is one of the values configured; otherwise, it's set to the minimum item count.
-            //
-            if (!empty($_GET['pagecount']) ) {
-                if ($_GET['pagecount'] != 'all') {
-                    if (!in_array($_GET['pagecount'], $page_count_array)) {
-                        $_GET['pagecount'] = $this->minimum_rows;
-                    }
-                }
-                $max_rows = $_GET['pagecount'];
-                $pagecnt  = $max_rows;
-            } else {
-                $max_rows = $this->minimum_rows;
-            }
-        }
+        $this->minimumRows = $max_rows;
 
         $this->sql_query = str_replace(["\n\r", "\r\n", "\n", "\r"], ' ', $query);
         if ($countQuery != '') {
@@ -73,23 +43,52 @@ class splitPageResults extends base
         $this->countQuery = ($countQuery != '') ? $countQuery : $this->sql_query;
         $this->page_name = $page_holder;
 
-        $this->debug[] = "Original query: $query";
-        $this->debug[] = "Original count-query: $countQuery";
-        $this->debug[] = "SQL query: " . $this->sql_query;
-        $this->debug[] = "count query: " . $this->countQuery;
- 
-        if (isset($_GET[$page_holder])) {
-            $page = $_GET[$page_holder];
-        } elseif (isset($_POST[$page_holder])) {
-            $page = $_POST[$page_holder];
-        } else {
-            $page = '';
+        // -----
+        // If the plugin has been configured to provide an items-per-page dropdown ...
+        //
+        if (PRODUCTS_PAGINATION_PRODUCT_COUNT === 'true') {
+            $page_count_array = explode (',', str_replace(' ', '', PRODUCTS_PAGINATION_COUNT_VALUES));
+            if (count($page_count_array) > 0) {
+                sort($page_count_array, SORT_NUMERIC);
+                if ($page_count_array[0] !== '*' && ((int)$page_count_array[0]) >= 0) {
+                    $this->minimumRows = (int)$page_count_array[0];
+                } elseif (count($page_count_array) > 1 && $page_count_array[1] !== '*' && ((int)$page_count_array[1]) >= 0) {
+                    $this->minimumRows = (int)$page_count_array[1];
+                }
+            }
+
+            // -----
+            // Since the pagecount value is now a $_GET variable, need to sanitize its value prior to use, making sure
+            // that the value is one of the values configured; otherwise, it's set to the minimum item count.
+            //
+            if (empty($_GET['pagecount']) ) {
+                $max_rows = $this->minimumRows;
+            } else {
+                if ($_GET['pagecount'] !== 'all') {
+                    if (!in_array($_GET['pagecount'], $page_count_array)) {
+                        $_GET['pagecount'] = $this->minimumRows;
+                    }
+                }
+                $max_rows = $_GET['pagecount'];
+                $pagecnt  = $max_rows;
+            }
         }
+
+        if ($debug === true) {
+            echo
+                '<br><br>' .
+                "Original query: $query<br><br>" .
+                "Original count-query: $countQuery<br><br>" .
+                "SQL query: " . $this->sql_query . '<br><br>' .
+                "count query: " . $this->countQuery . '<br><br>';
+        }
+
+        $page = $_GET[$page_holder] ?? $_POST[$page_holder] ?? '';
 
         if (empty($page) || !ctype_digit($page) || $page < 0) {
             $page = 1;
         }
-        $this->current_page_number = $page;
+        $this->current_page_number = (int)$page;
 
         // -----
         // If the very last 'ORDER BY' clause contains no other SQL directives, drop
@@ -108,9 +107,11 @@ class splitPageResults extends base
         }
         $query_lower = implode('order by', $query_parts);
 
-        $count_query = "SELECT count(*) AS `total` FROM (" . $query_lower . ") AS `result`";
-        
-        $this->debug[] = "count_query = $count_query";
+        $count_query = "SELECT COUNT(*) AS `total` FROM (" . $query_lower . ") AS `result`";
+
+        if ($debug === true) {
+            echo "count_query = $count_query<br><br>";
+        }
 
         $count = $db->Execute($count_query);
 
@@ -122,11 +123,11 @@ class splitPageResults extends base
         $this->number_of_rows_per_page = $max_rows;
         $this->number_of_rows = $count->fields['total'];
         if (isset($pagecnt)) {
-            if ($pagecnt == 'all') {
+            if ($pagecnt === 'all') {
                 $this->number_of_rows_per_page = ($this->number_of_rows > 0) ? $this->number_of_rows : 20;
             } elseif ($pagecnt > $this->number_of_rows) {
-                $this->number_of_rows_per_page = $this->minimum_rows;
-                $_GET['pagecount'] = $this->minimum_rows;
+                $this->number_of_rows_per_page = $this->minimumRows;
+                $_GET['pagecount'] = $this->minimumRows;
             }
         }
         $this->number_of_pages = ceil($this->number_of_rows / $this->number_of_rows_per_page);
@@ -137,10 +138,10 @@ class splitPageResults extends base
 
         $offset = $this->number_of_rows_per_page * ($this->current_page_number - 1);
 
-        $this->sql_query .= " LIMIT " . ($offset > 0 ? $offset . ", " : '') . $this->number_of_rows_per_page;
+        $this->sql_query .= " LIMIT " . ($offset > 0 ? "$offset, " : '') . $this->number_of_rows_per_page;
     }
 
-    public function display_links($max_page_links, $parameters = '') 
+    public function display_links($max_page_links, $parameters = '', $outputAsUnorderedList = false, $navElementLabel = '')
     {
         global $request_type;
         if (empty($max_page_links)) {
@@ -156,7 +157,7 @@ class splitPageResults extends base
 
         if ($this->number_of_pages > 1) {
             $ulClass = ' class="pagination-links"';
-            if (PRODUCTS_PAGINATION_DISPLAY_PAGEDROP == 'true' || PRODUCTS_PAGINATION_PRODUCT_COUNT == 'true') {
+            if (PRODUCTS_PAGINATION_DISPLAY_PAGEDROP === 'true' || PRODUCTS_PAGINATION_PRODUCT_COUNT === 'true') {
                 $ulClass = ' class="pp_float pagination-links"';
             }     
             $display_links_string .= '<ul' . $ulClass . '>';
@@ -170,7 +171,7 @@ class splitPageResults extends base
             } else {
                 $current_page_index = $this->current_page_number - 1;
                 $first_link = $current_page_index - floor(PRODUCTS_PAGINATION_MID_RANGE / 2);
-                $last_link  = $current_page_index + floor(PRODUCTS_PAGINATION_MID_RANGE  /2);
+                $last_link  = $current_page_index + floor(PRODUCTS_PAGINATION_MID_RANGE / 2);
 
                 if ($first_link < 0) {
                     $last_link += abs($first_link);
@@ -199,7 +200,7 @@ class splitPageResults extends base
 
                 }
             }
-    
+
             $display_links_string .= $this->formatPageLink(
                 PREVNEXT_TITLE_NEXT_PAGE, 
                 PP_TEXT_NEXT, 
@@ -298,19 +299,19 @@ class splitPageResults extends base
                 if ($this->formCreated()) {
                     $form = '';
                     $end_form = '';
-                    $var_name = 'pp_pagecount' . $this->input_pagecount_suffix;
-                    $hidden_vars = ($this->hidden_var_added) ? '' : zen_draw_hidden_field('pp_which_input', '0', 'id="pp-which-input"');
-                    $onchange = "document.getElementById('pp-which-input').value = 'pc-" . $this->input_pagecount_suffix . "'; ";
-                    $this->hidden_var_added = true;
+                    $var_name = 'pp_pagecount' . $this->inputPagecountSuffix;
+                    $hidden_vars = ($this->hiddenVarAdded) ? '' : zen_draw_hidden_field('pp_which_input', '0', 'id="pp-which-input"');
+                    $onchange = "document.getElementById('pp-which-input').value = 'pc-" . $this->inputPagecountSuffix . "'; ";
+                    $this->hiddenVarAdded = true;
                 } else {
                     $formPage = ($_GET['main_page'] == FILENAME_ADVANCED_SEARCH_RESULT) ? FILENAME_ADVANCED_SEARCH : $_GET['main_page'];
-                    $form = zen_draw_form('pp_count_form' . $this->input_pagecount_suffix, zen_href_link ($formPage, zen_get_all_get_params(array('pagecount'))), 'get');
+                    $form = zen_draw_form('pp_count_form' . $this->inputPagecountSuffix, zen_href_link ($formPage, zen_get_all_get_params(array('pagecount'))), 'get');
                     $end_form = '</form>';
                     $var_name = 'pagecount';
                     $hidden_vars = $this->createHiddenVars('page');
                     $onchange = '';
                 }
-                $dropdown_id = 'id="pp-pc-' . $this->input_pagecount_suffix . '"';
+                $dropdown_id = 'id="pp-pc-' . $this->inputPagecountSuffix . '"';
 
                 $whichCount = (isset($_GET['pagecount']) && $_GET['pagecount'] == 'all') ? 'all' : $whichCount;
 
@@ -319,7 +320,7 @@ class splitPageResults extends base
                 $dropdown .= $hidden_vars;
                 $dropdown .= PP_TEXT_ITEMS_PER_PAGE . zen_draw_pull_down_menu($var_name, $pageArray, $whichCount, $dropdown_id . ' onchange="' . $onchange . 'this.form.submit();"') . $end_form . '</div>' . PHP_EOL;
 
-                $this->input_pagecount_suffix++;
+                $this->inputPagecountSuffix++;
             }
         }
         return $dropdown;
@@ -343,22 +344,30 @@ class splitPageResults extends base
             if ($this->formCreated()) {
                 $form = '';
                 $end_form = '';
-                $var_name = 'pp_page' . $this->input_page_suffix;
-                $hidden_vars = ($this->hidden_var_added) ? '' : zen_draw_hidden_field('pp_which_input', '0', 'id="pp-which-input"');
-                $onchange = "document.getElementById('pp-which-input').value = 'p-" . $this->input_page_suffix . "'; ";
-                $this->hidden_var_added = true;
+                $var_name = 'pp_page' . $this->inputPageSuffix;
+                $hidden_vars = ($this->hiddenVarAdded) ? '' : zen_draw_hidden_field('pp_which_input', '0', 'id="pp-which-input"');
+                $onchange = "document.getElementById('pp-which-input').value = 'p-" . $this->inputPageSuffix . "'; ";
+                $this->hiddenVarAdded = true;
             } else {
-                $form = zen_draw_form('pp_page_form' . $this->input_page_suffix, zen_href_link($_GET['main_page'], zen_get_all_get_params(array('page'))), 'get');
+                $form = zen_draw_form('pp_page_form' . $this->inputPageSuffix, zen_href_link($_GET['main_page'], zen_get_all_get_params(['page'])), 'get');
                 $end_form = '</form>';
                 $var_name = 'page';
                 $hidden_vars = $this->createHiddenVars('pagecount');
                 $onchange = '';
             }
-            $dropdown_id = 'id="pp-p-' . $this->input_page_suffix . '"';
+            $dropdown_id = 'id="pp-p-' . $this->inputPageSuffix . '"';
 
-            $dropdown = PHP_EOL . '<div class="pp_page">' . $form . PP_TEXT_PAGE . zen_draw_pull_down_menu($var_name, $pageArray, $current_page, $dropdown_id . ' onchange="' . $onchange . 'this.form.submit();"') . $hidden_vars . $end_form . '</div>' . PHP_EOL;
-            
-            $this->input_page_suffix++;
+            $dropdown =
+                "\n" .
+                '<div class="pp_page">' .
+                    $form .
+                    PP_TEXT_PAGE .
+                    zen_draw_pull_down_menu($var_name, $pageArray, $current_page, $dropdown_id . ' onchange="' . $onchange . 'this.form.submit();"') .
+                    $hidden_vars .
+                    $end_form .
+                '</div>' . "\n";
+
+            $this->inputPageSuffix++;
 
         }
         return $dropdown;
@@ -373,9 +382,14 @@ class splitPageResults extends base
     private function createHiddenVars($additional_var = '')
     {
         $hidden_vars = ppHiddenVarsList();
-        if ($additional_var != '') {
+        if ($additional_var !== '') {
             $hidden_vars[] = $additional_var;
         }
         return ppCreateHiddenInputs($hidden_vars);
+    }
+
+    public function getSqlQuery()
+    {
+        return $this->sql_query;
     }
 }

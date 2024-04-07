@@ -78,7 +78,7 @@ if (!defined('PRODUCTS_PAGINATION_MAX')) {
 
             ( 'Enable Products Pagination?', 'PRODUCTS_PAGINATION_ENABLE', 'false', 'Use this setting to enable (default) or disable the plugin\'s overall operation.<br><br><b>Default: false</b>', $cgi, 5, now(), NULL, 'zen_cfg_select_option([\'true\', \'false\'],'),
 
-            ( 'Enable Products Pagination (Mobile)?', 'PRODUCTS_PAGINATION_ENABLE_MOBILE', 'false', 'Use this setting to enable or disable (default) the pagination display on <em>mobile</em> devices &mdash; <em>assuming</em> that your template provides support for mobile devices (like the <code>responsive_classic</code> template that is built into Zen Cart 1.5.5a)!<br><br><b>Default: false</b>', $cgi, 6, now(), NULL, 'zen_cfg_select_option([\'true\', \'false\'],')"
+            ( 'Enable Products Pagination (Mobile)?', 'PRODUCTS_PAGINATION_ENABLE_MOBILE', 'false', 'Use this setting to enable or disable (default) the pagination display on <em>mobile</em> devices &mdash; <em>assuming</em> that your template provides support for mobile devices (like the <code>responsive_classic</code> template that is built into Zen Cart)!<br><br><b>Default: false</b>', $cgi, 6, now(), NULL, 'zen_cfg_select_option([\'true\', \'false\'],')"
     );
 
     $keys_resort_array = [
