@@ -18,16 +18,16 @@ class ProductsPaginationObserver extends base
     protected bool $isTablet = false;
     protected bool $isDesktop = true;
 
-    protected string $categoryName;
+    protected string $categoryName = '';
     protected int $previousPosition;
     protected int $nextPosition;
     protected int $counter;
     protected int $position;
 
     protected int $productsFoundCount = 0;
-    protected array $productArray = [];
+    protected array $productsArray = [];
 
-    protected string $pageLinkParams;
+    protected string $pageLinkParams = '';
     protected string $cPath;
 
     public function __construct()
@@ -53,7 +53,8 @@ class ProductsPaginationObserver extends base
 
         // -----
         // Set a global variable (used by /includes/templates/template_default/jscript/jscript_product_pagination.php)
-        // to indicate that this 'alternate' pagination is active.
+        // to indicate that this 'alternate' pagination is active. Also used by the one template-override in
+        // /includes/templates/YOUR_TEMPLATE/tpl_products_next_previous.php.
         //
         $GLOBALS['product_pagination_active'] = true;
     }
@@ -149,7 +150,7 @@ class ProductsPaginationObserver extends base
                 $cPath = zen_get_product_path((int)$_GET['products_id']);
                 $cPath_array = zen_parse_category_path($cPath);
                 $cPath = implode('_', $cPath_array);
-                $current_category_id = $cPath_array[(count($cPath_array)-1)];
+                $current_category_id = $cPath_array[(count($cPath_array) - 1)];
             }
 
             $this->pageLinkParams = "cPath=$cPath&products_id=";
@@ -180,15 +181,15 @@ class ProductsPaginationObserver extends base
 
             $this->counter = 0;
             $this->position = 0;
-            foreach ($this->idArray as $offset => $value) {
-                if ((int)$value === (int)$_GET['products_id']) {
+            foreach ($this->productsArray as $offset => $values) {
+                if ($values['id'] === (int)$_GET['products_id']) {
                     $this->position = $this->counter;
                     if ($offset === 0) {
                         $this->previousPosition = -1;
                     } else {
                         $this->previousPosition = $offset - 1;
                     }
-                    if (isset($this->idArray[$offset + 1]) && $this->idArray[$offset + 1]) {
+                    if (!empty($this->productsArray[$offset + 1])) {
                         $this->nextPosition = $offset + 1;
                     } else {
                         $this->nextPosition = 0;
@@ -206,7 +207,7 @@ class ProductsPaginationObserver extends base
     //
     public function productsFoundCount(): int
     {
-        return $thist->productsFoundCount;
+        return $this->productsFoundCount;
     }
 
     // -----
@@ -245,7 +246,7 @@ class ProductsPaginationObserver extends base
     // Return the page-link parameters (the cPath and products_id) determined during
     // initialization.
     //
-    public function getPageLinkParameters()
+    public function getPageLinkParameters(): string
     {
         return $this->pageLinkParams;
     }
