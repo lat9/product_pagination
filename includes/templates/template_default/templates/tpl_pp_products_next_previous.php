@@ -97,7 +97,7 @@ if ($products_found_count <= (int)PRODUCTS_PAGINATION_MAX) {
     for ($i = 0; $i < $products_found_count; $i++) {
         if ($display_range[0] > 1 && $i == $display_range[0]) { //note: array values are doubles, so using loosy comparison!
 ?>
-            <li class="hellip"> ... </li>
+            <li class="hellip"> &hellip; </li>
 <?php
         }
         // loop through all pages. if first, last, or in range, display
@@ -108,7 +108,7 @@ if ($products_found_count <= (int)PRODUCTS_PAGINATION_MAX) {
             $product_link = zen_href_link(zen_get_info_page($ppID), $page_link_parms . $ppID, 'NONSSL', false);
 ?>
             <li>
-                <a href="<?= $product_link ?>"<?= $item_class ?> title="<?= echo $p_info['name'] ?>">
+                <a href="<?= $product_link ?>"<?= $item_class ?> title="<?= $p_info['name'] ?>">
                     <?= $i + 1 ?>
                 </a>
             </li>

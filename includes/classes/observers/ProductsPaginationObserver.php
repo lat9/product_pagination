@@ -131,7 +131,22 @@ class ProductsPaginationObserver extends base
         // are enabled for display.  The pagination status depends on whether/not the
         // current page is configured for this pagination.
         //
-        return in_array($current_page_base, explode(',', str_replace(' ', '', PRODUCTS_PAGINATION_OTHER_MAIN_PAGES)));
+        return in_array(
+            $current_page_base,
+            explode(
+                ',',
+                str_replace(
+                    [
+                        ' ',
+                        "\n",
+                        "\r",
+                        "\t",
+                    ],
+                    '',
+                    PRODUCTS_PAGINATION_OTHER_MAIN_PAGES
+                )
+            )
+        );
     }
 
     // -----

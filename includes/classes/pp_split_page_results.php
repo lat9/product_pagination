@@ -12,7 +12,7 @@ if (!defined('IS_ADMIN_FLAG')) {
 // base class.  It's active ONLY WHEN the plugin has been configured to provide processing on "other", non-product-details type pages
 // and the current page is in that configuration.
 //
-class splitPageResults extends base 
+class splitPageResults extends base
 {
     public int $current_page_number;
     public string $sql_query;
@@ -31,7 +31,8 @@ class splitPageResults extends base
     {
         global $db;
 
-        $max_rows = ($max_rows == '' || $max_rows <= 0) ? 20 : $max_rows;
+        $max_rows = (int)$max_rows;
+        $max_rows = ($max_rows <= 0) ? 20 : $max_rows;
         $this->minimumRows = $max_rows;
 
         $this->sql_query = str_replace(["\n\r", "\r\n", "\n", "\r"], ' ', $query);
@@ -67,7 +68,7 @@ class splitPageResults extends base
                         $_GET['pagecount'] = $this->minimumRows;
                     }
                 }
-                $max_rows = $_GET['pagecount'];
+                $max_rows = (int)$_GET['pagecount'];
                 $pagecnt = $max_rows;
             }
         }
