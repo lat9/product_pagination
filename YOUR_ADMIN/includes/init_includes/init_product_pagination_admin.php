@@ -6,8 +6,8 @@
 //
 // Last updated: v3.0.0
 //
-define('PRODUCTS_PAGINATION_VERSION_CURRENT', '3.0.0-beta1');
-define('PRODUCTS_PAGINATION_VERSION_CURRENT_DATE', '03-24-2024');
+define('PRODUCTS_PAGINATION_VERSION_CURRENT', '3.0.0-beta2');
+define('PRODUCTS_PAGINATION_VERSION_CURRENT_DATE', '04-16-2024');
 
 $pp_current_version = PRODUCTS_PAGINATION_VERSION_CURRENT . ' (' . PRODUCTS_PAGINATION_VERSION_CURRENT_DATE . ')';
 
@@ -55,13 +55,13 @@ if (!defined('PRODUCTS_PAGINATION_MAX')) {
 
             ('Enable links on other pages?', 'PRODUCTS_PAGINATION_OTHER', 'true', 'If enabled, the &quot;Other pages to link&quot; will have the pagination links applied.<br><br><b>Default: true</b>', $cgi, 40, now(), NULL, 'zen_cfg_select_option([\'true\', \'false\'],'),
 
-            ('Other pages to link', 'PRODUCTS_PAGINATION_OTHER_MAIN_PAGES', 'account_history, advanced_search_result, featured_products,index, product_reviews, products_all, products_new, reviews, specials', 'This comma-separated list identifies the &quot;other&quot; pages to which the pagination display should be applied.', $cgi, 50, now(), NULL, NULL),
+            ('Other pages to link', 'PRODUCTS_PAGINATION_OTHER_MAIN_PAGES', 'account_history, advanced_search_result, featured_products,index, product_reviews, products_all, products_new, reviews, specials', 'This comma-separated list identifies the &quot;other&quot; pages to which the pagination display should be applied.', $cgi, 50, now(), NULL, 'zen_cfg_textarea('),
 
             ('Include page-select drop-down?', 'PRODUCTS_PAGINATION_DISPLAY_PAGEDROP', 'false', 'If enabled, a drop-down menu is displayed on the <strong>other</strong> pages to allow the customer to go to a specific page number.<br><b>Default: false</b>', $cgi, 60, now(), NULL, 'zen_cfg_select_option([\'true\', \'false\'],'),
 
             ('Include item-count drop-down?', 'PRODUCTS_PAGINATION_PRODUCT_COUNT', 'false', 'If enabled, a drop-down menu is displayed to allow the customer to choose the number of items displayed for the <strong>other</strong> pages.  The count choices are contained in &quot;Item Counts&quot; (see below).<br><b>Default: false</b>', $cgi, 70, now(), NULL, 'zen_cfg_select_option([\'true\', \'false\'],'),
 
-            ('Item counts', 'PRODUCTS_PAGINATION_COUNT_VALUES', '10,25,50,100,*', 'This comma-separated list identifies the item-count choices that will be displayed in a drop-down menu to the customer.  The value \'*\' corresponds to <em>All</em> the items being displayed.', $cgi, 80, now(), NULL, NULL)"
+            ('Item counts', 'PRODUCTS_PAGINATION_COUNT_VALUES', '10, 25, 50, 100, *', 'This comma-separated list identifies the item-count choices that will be displayed in a drop-down menu to the customer.  The value \'*\' corresponds to <em>All</em> the items being displayed.', $cgi, 80, now(), NULL, NULL)"
     );
 
     define('PRODUCTS_PAGINATION_VERSION', '0.0.0');
@@ -76,9 +76,9 @@ if (!defined('PRODUCTS_PAGINATION_MAX')) {
          VALUES
             ('Products Pagination Version', 'PRODUCTS_PAGINATION_VERSION', '0.0.0', 'This is the current version of the plugin.<br>', $cgi, 1, now(), NULL, 'zen_cfg_read_only('),
 
-            ( 'Enable Products Pagination?', 'PRODUCTS_PAGINATION_ENABLE', 'false', 'Use this setting to enable (default) or disable the plugin\'s overall operation.<br><br><b>Default: false</b>', $cgi, 5, now(), NULL, 'zen_cfg_select_option([\'true\', \'false\'],'),
+            ('Enable Products Pagination?', 'PRODUCTS_PAGINATION_ENABLE', 'false', 'Use this setting to enable (default) or disable the plugin\'s overall operation.<br><br><b>Default: false</b>', $cgi, 5, now(), NULL, 'zen_cfg_select_option([\'true\', \'false\'],'),
 
-            ( 'Enable Products Pagination (Mobile)?', 'PRODUCTS_PAGINATION_ENABLE_MOBILE', 'false', 'Use this setting to enable or disable (default) the pagination display on <em>mobile</em> devices &mdash; <em>assuming</em> that your template provides support for mobile devices (like the <code>responsive_classic</code> template that is built into Zen Cart 1.5.5a)!<br><br><b>Default: false</b>', $cgi, 6, now(), NULL, 'zen_cfg_select_option([\'true\', \'false\'],')"
+            ('Enable Products Pagination (Mobile)?', 'PRODUCTS_PAGINATION_ENABLE_MOBILE', 'false', 'Use this setting to enable or disable (default) the pagination display on <em>mobile</em> devices &mdash; <em>assuming</em> that your template provides support for mobile devices (like the <code>responsive_classic</code> template that is built into Zen Cart)!<br><br><b>Default: false</b>', $cgi, 6, now(), NULL, 'zen_cfg_select_option([\'true\', \'false\'],')"
     );
 
     $keys_resort_array = [
@@ -95,6 +95,25 @@ if (!defined('PRODUCTS_PAGINATION_MAX')) {
         $db->Execute("UPDATE " . TABLE_CONFIGURATION . " SET sort_order = $sort_order WHERE configuration_key = '$key' LIMIT 1");
     }
     define('PRODUCTS_PAGINATION_VERSION', '0.0.0');
+}
+
+// -----
+// Check for any version-specific changes.
+//
+switch (true) {
+    case version_compare(CHECKOUT_ONE_MODULE_VERSION, '3.0.0', '<'):
+        // -----
+        // v3.0.0:  Update the the 'set_function' to use a textarea instead of an input.
+        //
+        $db->Execute(
+            "UPDATE " . TABLE_CONFIGURATION . "
+                SET set_function = 'zen_cfg_textarea('
+              WHERE configuration_key = 'PRODUCTS_PAGINATION_OTHER_MAIN_PAGES'
+              LIMIT 1"
+        );
+
+    default:                                                            //-Fall-through processing from above
+        break;
 }
 
 // -----

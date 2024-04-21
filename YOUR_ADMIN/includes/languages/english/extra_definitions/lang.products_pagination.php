@@ -5,4 +5,7 @@
 //
 // Last updated: v3.0.0
 //
-define('BOX_CONFIGURATION_PRODUCT_PAGINATION', 'Product Pagination');
+$define = [
+    'BOX_CONFIGURATION_PRODUCT_PAGINATION' => 'Product Pagination',
+];
+return $define;
