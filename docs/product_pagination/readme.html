@@ -42,7 +42,7 @@ td, th {
 
 <body>
     <h1>Products' Pagination <span class="smaller">for Zen Cart v1.5.8 and later, including v2.0.0</span></h1>
-    <h2>Version 3.0.0 by lat9 and torvista</h3>
+    <h2>Version 3.0.1 by lat9 and torvista</h3>
     <h3>Copyright &copy; 2010-2024 <a href="https://vinosdefrutastropicales.com" target="_blank">Vinos de Frutas Tropicales</a>. All rights reserved.</h3>
     <hr>
     <p>Current Support Thread at Zen Cart Forums: <a href="https://www.zen-cart.com/forum/showthread.php?t=169227" target="_blank">https://www.zen-cart.com/forum/showthread.php?t=169227</a></p>
@@ -195,6 +195,12 @@ td, th {
 
     <h3>Change History</h3>
     <ul>
+        <li>v3.0.1, 2024-04-24 (torvista and lat9):<ul>
+            <li>BUGFIX: Correct constant used in admin initialization.</li>
+            <li>The following files were changed:<ol>
+                <li>/YOUR_ADMIN/includes/init_includes/init_product_pagination_admin.php</li>
+            </ol></li>
+        </ul></li>
         <li>v3.0.0, 2024-04-24 (torvista and lat9):<ul>
             <li>BUGFIX: If debug is enabled, echo the debug information to the screen.</li>
             <li>BUGFIX: Ensure category-name is 'santitized' for display in the <em>View Product Listing</em> link's <code>title</code> attribute.</li>

@@ -4,9 +4,9 @@
 //
 // Starting with v2.0.0 of the plugin, perform the auto-install of the various configuration items.
 //
-// Last updated: v3.0.0
+// Last updated: v3.0.1
 //
-define('PRODUCTS_PAGINATION_VERSION_CURRENT', '3.0.0');
+define('PRODUCTS_PAGINATION_VERSION_CURRENT', '3.0.1');
 define('PRODUCTS_PAGINATION_VERSION_CURRENT_DATE', '04-24-2024');
 
 $pp_current_version = PRODUCTS_PAGINATION_VERSION_CURRENT . ' (' . PRODUCTS_PAGINATION_VERSION_CURRENT_DATE . ')';
@@ -98,10 +98,13 @@ if (!defined('PRODUCTS_PAGINATION_MAX')) {
 }
 
 // -----
-// Check for any version-specific changes.
+// Check for any version-specific changes; the actual version number is appended
+// by the release date!
 //
+$pp_version_elements = explode(PRODUCTS_PAGINATION_VERSION, ' ');
+$pp_version = $pp_version_elements[0];
 switch (true) {
-    case version_compare(CHECKOUT_ONE_MODULE_VERSION, '3.0.0', '<'):
+    case version_compare($pp_version, '3.0.0', '<'):
         // -----
         // v3.0.0:  Update the the 'set_function' to use a textarea instead of an input.
         //
