@@ -56,8 +56,7 @@ td, th {
 
     <h2>Overview</h2>
     <p>v3.0.0 (and later) of <em>Products' Pagination</em> supports the Zen Cart 1.5.8 and 2.0.0 releases.  It's been validated on PHP versions 7.4 through 8.3 &mdash; Zen Cart version-dependent.</p>
-
-    <p>This plugin replaces the default previous/next navigation for your store&rsquo;s product information pages:</p>
+    <p>The plugin has been tested with the built-in <code>responsive_classic</code> and the <a href="https://www.zen-cart.com/downloads.php?do=file&id=2191" target="_blank">ZCA Bootstrap <span class="smaller">(v3.6.5 or later)</span></a> templates and replaces the default previous/next navigation for your store's product information pages:</p>
     <ul>
       <li>document_general_info</li>
       <li>document_product_info</li>
@@ -164,7 +163,7 @@ td, th {
     <p>If you've got that file in the &quot;overrides&quot; folder, it's <em>probably</em> safe to just remove that file and let your Zen Cart 1.5.4 or later's built-in processing take over.  Otherwise, check your non-overrides file for a single addition by the &quot;product_pagination&quot; plugin and simply remove that code-block.  Zen Cart observer-level processing handles that change in v2.0.0.</p>
 
     <h3>Installation and Upgrading</h3>
-     <p>There is one <span class="template">template-override</span> in this plugin; you should <strong>always</strong> backup your cart's database and files prior to making any changes.</p>
+     <p>There is one <em><b>hand-edited</b></em> <span class="template">template-override</span> required for this plugin; see <a href="https://github.com/lat9/product_pagination/wiki/Enable-display-on-product-details-pages" target="_blank">this</a> GitHub Wiki article for more information. You should <strong>always</strong> backup your cart's database and files prior to making any changes.</p>
     <ol type="A">
         <li>If you are installing/upgrading on a <code>zc158/zc158a</code> installation, <em>there are some <span class="corefile">core-file</span> changes</em> and additions that need to be copied first.  See <a href="#upgrade-zc158">Installing/Upgrading v3.0.0 on a zc158/zc158a Installation</a> for additional information.</li>
         <li>If you are upgrading from v2.x.x of the plugin, see <a href="#upgrade-from-2xx">Upgrading from 2.x.x</a> for additional changes required <em>prior to</em> installing the plugin's current file-set.</li>
@@ -175,6 +174,7 @@ td, th {
         <li>Copy the plugin's files to your store's file-system:<ol>
           <li>/includes/auto_loaders/config.pagination.php</li>
           <li>/includes/classes/pp_split_page_results.php</li>
+          <li>/includes/classes/pp_zca_split_page_results.php</li>
           <li>/includes/classes/observers/ProductPaginationObserver.php</li>
           <li>/includes/extra_cart_actions/pagination_actions.php</li>
           <li>/includes/functions/extra_functions/products_pagination_functions.php</li>
@@ -183,7 +183,6 @@ td, th {
           <li>/includes/templates/template_default/templates/tpl_pp_products_next_previous.php</li>
           <li>/includes/templates/YOUR_TEMPLATE/css/stylesheet_prod_pagination.css</li>
           <li>/includes/templates/YOUR_TEMPLATE/jscript/jscript_product_pagination.php</li>
-          <li><span class="template">/includes/templates/YOUR_TEMPLATE/templates/tpl_products_next_previous.php</span></li>
           <li>/YOUR_ADMIN/includes/auto_loaders/config.products_pagination_admin.php</li>
           <li>/YOUR_ADMIN/includes/init_includes/init_product_pagination_admin.php</li>
           <li>/YOUR_ADMIN/includes/languages/english/extra_definitions/lang.products_pagination.php</li>
@@ -198,11 +197,13 @@ td, th {
     <ul>
         <li>v3.0.0-beta1, 2024-03-24 (torvista and lat9):<ul>
             <li>CHANGE: Drop support for Zen Cart versions <em>prior to</em> 1.5.8.</li>
-            <li>The following files were changed, <span class="added">added</span> or <span class="removed">removed</span>.  For files that have been <span class="removed">removed</span>, refer to <a href="#upgrade-from-2xx">this</a> section for further information:<ol>
+            <li>CHANGE: Add support for the ZCA Bootstrap template, <em>v3.6.5 or later</em>.</li>
+            <li>The following files were changed, <span class="added">added</span> or <span class="removed">removed</span>.  For files that have been <span class="removed">removed</span>, refer to <a href="#upgrade-from-2xx">this</a> section for further information unless otherwise noted:<ol>
                 <li>/includes/auto_loaders/config.pagination.php</li>
                 <li><span class="added">/includes/classes/observers/ProductsPaginationObserver.php</span></li>
                 <li><span class="removed">/includes/classes/observers/class.products_pagination_observer.php</span></li>
                 <li>/includes/classes/pp_split_page_results.php</li>
+                <li><span class="added">/includes/classes/pp_zca_split_page_results.php</span></li>
                 <li><span class="removed">/includes/classes/split_page_results.php</span></li>
                 <li>/includes/functions/extra_functions/products_pagination_functions.php</li>
                 <li><span class="added">/includes/languages/english/extra_definitions/lang.products_pagination.php</span></li>
@@ -214,7 +215,7 @@ td, th {
                 <li><span class="added">/includes/templates/YOUR_TEMPLATE/jscript.jscript_product_pagination.php</span></li>
                 <li><span class="removed">/includes/templates/YOUR_TEMPLATE/templates/tpl_index_product_list.php</span></li>
                 <li><span class="removed">/includes/templates/YOUR_TEMPLATE/templates/tpl_modules_listing_display_order.php</li>
-                <li>/includes/templates/YOUR_TEMPLATE/templates/tpl_products_next_previous.php</li>
+                <li><span class="removed">/includes/templates/YOUR_TEMPLATE/templates/tpl_products_next_previous.php</span> <span class="smaller">(See <a href="https://github.com/lat9/product_pagination/wiki/Enable-display-on-product-details-pages" target="_blank">this</a> Wiki article for more information)</span></li>
                 <li>/YOUR_ADMIN/includes/auto_loaders/config.products_pagination_admin.php</li>
                 <li>/YOUR_ADMIN/includes/init_includes/init_product_pagination_admin.php</li>
                 <li><span class="added">/YOUR_ADMIN/includes/languages/english/extra_definitions/lang.products_pagination.php</span></li>

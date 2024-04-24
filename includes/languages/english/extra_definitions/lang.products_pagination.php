@@ -8,8 +8,10 @@
 $define = [
     'PP_PREV_NEXT_PRODUCT' => 'Currently Viewing Product ',
     'PP_PREV_NEXT_PRODUCT_SEP' => ' of ',
-    'PP_TEXT_PREVIOUS' => 'Previous',
+    'PP_TEXT_PREVIOUS' => 'Prev',
     'PP_TEXT_NEXT' => 'Next',
+    'PP_ARIA_TITLE_FIRST_PAGE' => 'Viewing the first page',
+    'PP_ARIA_TITLE_LAST_PAGE' => 'Viewing the last page',
     'PP_TEXT_PRODUCT_LISTING' => 'View Product Listing',
     'PP_TEXT_PRODUCT_LISTING_TITLE' => 'View more &quot;%s&quot;', // %s is replaced by the categories name
     'PP_TEXT_PAGE' => 'Page: ',

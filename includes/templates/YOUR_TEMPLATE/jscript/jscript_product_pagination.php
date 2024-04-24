@@ -17,19 +17,21 @@ if (!isset($product_pagination_active) || empty($_GET['pagecount'])) {
 // Otherwise, include a teeny jQuery script to dynamically add
 // the hidden-field for 'pagecount' to the products' filter and
 // sorter forms.
+//
+$pp_pagecount = ($_GET['pagecount'] === 'all') ? 'all' : ((int)$_GET['pagecount']);
 ?>
 <script>
 jQuery(document).ready(function() {
     jQuery('<input>').attr({
         name: 'pagecount',
         type: 'hidden',
-        value: <?= $_GET['pagecount'] ?>
+        value: '<?= $pp_pagecount ?>'
     }).appendTo('form[name=filter]');
 
     jQuery('<input>').attr({
         name: 'pagecount',
         type: 'hidden',
-        value: <?= $_GET['pagecount'] ?>
+        value: '<?= $pp_pagecount ?>'
     }).appendTo('form[name=sorter_form]');
 });
 </script>

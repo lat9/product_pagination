@@ -40,6 +40,14 @@ class ProductsPaginationObserver extends base
 
         require DIR_WS_CLASSES . 'pp_split_page_results.php';
 
+        if ($this->isBootstrapTemplate === true) {
+            if (!file_exists(DIR_WS_CLASSES . 'pp_zca_split_page_results.php')) {
+                $this->isEnabled = false;
+                return;
+            }
+            require DIR_WS_CLASSES . 'pp_zca_split_page_results.php';
+        }
+
         $this->attach(
             $this,
             [
@@ -87,7 +95,7 @@ class ProductsPaginationObserver extends base
         // -----
         // Additional variables to be set for non-Bootstrap templates, e.g. responsive_classic.
         //
-        $this->isBootstrapTemplate = (function_exists('zca_bootstrap_active') && zca_bootstrap_active() === true);
+        $this->isBootstrapTemplate = (defined('IS_ZCA_BOOTSTRAP_TEMPLATE'));
         if ($this->isBootstrapTemplate === false) {
             if (!class_exists('Mobile_Detect') && file_exists(DIR_WS_CLASSES . 'Mobile_Detect.php')) {
                 require_once DIR_WS_CLASSES . 'Mobile_Detect.php';
