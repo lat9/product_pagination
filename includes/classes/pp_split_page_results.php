@@ -2,7 +2,7 @@
 // -----
 // Part of the "Product Pagination" plugin by lat9 (lat9@vinosdefrutastropicales.com)
 // Copyright (c) 2010-2024 Vinos de Frutas Tropicales
-// 
+//
 if (!defined('IS_ADMIN_FLAG')) {
     die('Illegal Access');
 }
@@ -18,7 +18,7 @@ class splitPageResults extends base
     public string $sql_query;
     public int $number_of_rows;
     public int $number_of_pages;
-    
+
     protected int $number_of_rows_per_page;
     protected string $page_name;
     protected string $countQuery;
@@ -180,7 +180,7 @@ class splitPageResults extends base
                     $display_links_string .= $this->formatPageLink(
                         sprintf(PREVNEXT_TITLE_PAGE_NO, $i),
                         ARIA_PAGINATION_GOTO . sprintf(ARIA_PAGINATION_PAGE_NUM, $i + 1),
-                        $i,
+                        (string)$i,
                         $parameters . $this->page_name . '=' . $i,
                         true,
                         ($i == $this->current_page_number) ? $this->currentLiClass . '"' : ''
@@ -338,7 +338,7 @@ class splitPageResults extends base
                 '</li>';
         }
         return $returnValue;
-    } 
+    }
 
     protected function createCountDropdown(int $numItems, $whichCount): string
     {
