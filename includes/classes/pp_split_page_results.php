@@ -219,7 +219,7 @@ class splitPageResults extends base
                         $display_links_string .= $this->formatPageLink(
                             sprintf(PREVNEXT_TITLE_PAGE_NO, $pNum),
                             $aria_label . sprintf(ARIA_PAGINATION_PAGE_NUM, $pNum),
-                            $pNum,
+                            (string)$pNum,
                             $parameters . $this->page_name . '=' . $pNum,
                             true,
                             $class_list
