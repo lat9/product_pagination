@@ -133,7 +133,7 @@ class splitPageResults extends base
                 $_GET['pagecount'] = $this->minimumRows;
             }
         }
-        $this->number_of_pages = ceil($this->number_of_rows / $this->number_of_rows_per_page);
+        $this->number_of_pages = (int)ceil($this->number_of_rows / $this->number_of_rows_per_page);
 
         if ($this->current_page_number > $this->number_of_pages) {
             $this->current_page_number = $this->number_of_pages;
