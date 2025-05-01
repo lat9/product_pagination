@@ -133,7 +133,7 @@ class splitPageResults extends base
                 $_GET['pagecount'] = $this->minimumRows;
             }
         }
-        $this->number_of_pages = ceil($this->number_of_rows / $this->number_of_rows_per_page);
+        $this->number_of_pages = (int)ceil($this->number_of_rows / $this->number_of_rows_per_page);
 
         if ($this->current_page_number > $this->number_of_pages) {
             $this->current_page_number = $this->number_of_pages;
@@ -219,7 +219,7 @@ class splitPageResults extends base
                         $display_links_string .= $this->formatPageLink(
                             sprintf(PREVNEXT_TITLE_PAGE_NO, $pNum),
                             $aria_label . sprintf(ARIA_PAGINATION_PAGE_NUM, $pNum),
-                            $pNum,
+                            (string)$pNum,
                             $parameters . $this->page_name . '=' . $pNum,
                             true,
                             $class_list
